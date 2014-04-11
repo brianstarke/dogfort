@@ -10,6 +10,9 @@ The following environment variables need to be set in a local ```.env``` file.
 ```
 PORT=9000
 HOST=localhost
+
+MONGO_HOST=localhost
+MONGO_DB=dogfort
 ```
 
 ### run
