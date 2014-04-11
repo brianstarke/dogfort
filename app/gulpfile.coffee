@@ -1,5 +1,5 @@
-gulp 	  = require 'gulp'
-jade 	  = require 'gulp-jade'
+gulp    = require 'gulp'
+jade    = require 'gulp-jade'
 clean   = require 'gulp-clean'
 coffee  = require 'gulp-coffee'
 concat  = require 'gulp-concat'
@@ -17,8 +17,8 @@ gulp.task 'clean', ->
 # compile jade templates
 gulp.task 'jade', ->
   gulp.src(paths.jade)
-  	.pipe(jade())
-  	.pipe(gulp.dest(paths.dist))
+    .pipe(jade())
+    .pipe(gulp.dest(paths.dist))
 
 # compile/concat coffeescript
 gulp.task 'scripts', ->
