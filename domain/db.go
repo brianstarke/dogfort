@@ -8,13 +8,21 @@ import (
 	"labix.org/v2/mgo"
 )
 
+var (
+	usersCollection = "users"
+)
+
 /*
 Make all domain structs available as martini middleware
 */
 func DomainMiddleware() martini.Handler {
 	db := intializeMongo()
 
+	userDomain := &UserDomain{db.C(usersCollection)}
+
 	return func(context martini.Context) {
+		context.Map(userDomain)
+
 		context.Next()
 	}
 }
@@ -27,6 +35,8 @@ func intializeMongo() *mgo.Database {
 
 	if err != nil {
 		log.Fatalf("Could not initialize Mongo connection, : %s", err.Error())
+
+		return nil
 	} else {
 		return session.DB(os.Getenv("MONGO_DB"))
 	}
