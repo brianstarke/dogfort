@@ -1,0 +1,27 @@
+{
+  "name": "dogfort",
+  "version": "0.0.0",
+  "description": "Share images and chat with your asshole friends.  Antisocial networking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianstarke/dogfort"
+  },
+  "author": "Brian Starke <brian.starke@gmail.com>",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/brianstarke/dogfort/issues"
+  },
+  "homepage": "https://github.com/brianstarke/dogfort",
+  "devDependencies": {
+    "gulp": "~3.6.0",
+    "gulp-jade": "~0.5.0",
+    "coffee-script": "~1.7.1",
+    "gulp-clean": "~0.2.4",
+    "gulp-coffee": "~1.4.1",
+    "gulp-concat": "~2.2.0"
+  }
+}
