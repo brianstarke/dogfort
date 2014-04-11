@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/codegangsta/martini"
+	"github.com/go-martini/martini"
 	"labix.org/v2/mgo"
 )
 

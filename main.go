@@ -6,9 +6,10 @@ import (
 
 	"github.com/brianstarke/dogfort/domain"
 	"github.com/brianstarke/dogfort/routes"
-	"github.com/codegangsta/martini"
-	"github.com/codegangsta/martini-contrib/render"
+	"github.com/go-martini/martini"
 	_ "github.com/joho/godotenv/autoload" // load all .env variables
+	"github.com/martini-contrib/binding"
+	"github.com/martini-contrib/render"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 	m.Use(domain.DomainMiddleware())
 
 	// user routes
-	m.Post("/api/v1/users", routes.CreateUser)
+	m.Post("/api/v1/users", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.CreateUser)
 
 	// start server
 	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
