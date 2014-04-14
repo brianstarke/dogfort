@@ -22,8 +22,8 @@ html(ng-app='dogfort')
             a(href='/login') login
 
     .uk-container.uk-margin-left.uk-margin-right.uk-margin(ng-controller='ChatCtrl')
-      .uk-panel.uk-panel-box(ng-repeat="m in chatMessages")
-        article.uk-comment
+      div(ng-repeat="m in chatMessages")
+        article.uk-comment.uk-panel.uk-panel-box.uk-animation-slide-left
           header.uk-comment-header
             div.avatar-frame.uk-comment-avatar(display: 'inline-block')
               img(ng-src="{{m.avatarUrl}}")
@@ -32,6 +32,7 @@ html(ng-app='dogfort')
               li
                 a(href='/') @{{m.username}}
               li {{m.ts}}
+        br
 
 #my-id.uk-offcanvas
   .uk-offcanvas-bar.uk-offcanvas-bar-flip

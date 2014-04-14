@@ -62,7 +62,7 @@ gulp.task 'images', ->
 
 # rerun the task when a file changes
 gulp.task 'watch', ->
-  gulp.watch paths.scripts, ['coffee']
+  gulp.watch paths.coffee, ['coffee']
   gulp.watch paths.jade, ['jade']
   gulp.watch paths.less, ['less']
   gulp.watch paths.fonts, ['fonts']
