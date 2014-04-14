@@ -7,9 +7,15 @@ concat  = require 'gulp-concat'
 
 paths =
   jade: ['**/*.jade', '!node_modules/**/*.jade']
-  scripts: 'scripts/**/*.coffee'
+  coffee: ['scripts/**/*.coffee']
+  scripts: [
+    './bower_components/jquery/jquery.min.js'
+    './bower_components/uikit/dist/js/uikit.min.js'
+    './bower_components/uikit/dist/js/addons/sticky.min.js'
+  ]
   less: './less/**/*.less'
   fonts: ['./bower_components/uikit/src/fonts/*.*']
+  images: './images/*.png'
   dist: '../public'
 
 # clean public folder
@@ -31,15 +37,23 @@ gulp.task 'less', ->
 
 # compile/concat coffeescript
 gulp.task 'scripts', ->
-  gulp.src(paths.scripts)
+  gulp.src(paths.coffee)
     .pipe(coffee())
     .pipe(concat('dogfort.js'))
+    .pipe(gulp.dest(paths.dist + '/scripts'))
+  gulp.src(paths.scripts)
+    .pipe(concat('thirdparty.js'))
     .pipe(gulp.dest(paths.dist + '/scripts'))
 
 # copy fonts
 gulp.task 'fonts', ->
   gulp.src(paths.fonts)
     .pipe gulp.dest(paths.dist + '/fonts')
+
+# copy images
+gulp.task 'images', ->
+  gulp.src(paths.images)
+    .pipe gulp.dest(paths.dist + '/images')
 
 # rerun the task when a file changes
 gulp.task 'watch', ->
@@ -49,6 +63,6 @@ gulp.task 'watch', ->
   gulp.watch paths.fonts, ['fonts']
 
 # do ALL THE THINGS
-gulp.task 'build', ['clean', 'jade', 'less', 'fonts', 'scripts']
+gulp.task 'build', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images']
 
-gulp.task 'default', ['clean', 'jade', 'less', 'fonts', 'scripts', 'watch']
+gulp.task 'default', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images', 'watch']

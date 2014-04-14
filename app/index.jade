@@ -4,22 +4,75 @@ html
 
     link(rel='stylesheet', href='/styles/app.css')
 
+    script(type='text/javascript', src='/scripts/thirdparty.js')
+    script(type='text/javascript', src='/scripts/dogfort.js')
+
   body
-    nav.uk-navbar
-      a.uk-navbar-brand(href="/") dogfort
-      ul.uk-navbar-nav
-        li
-          a.uk-navbar-brand(href="/") rooms
+    nav.uk-navbar.uk-navbar-attached(data-uk-sticky)
+      a.uk-navbar-brand.uk-hidden-small(href="/") dogfort
 
       .uk-navbar-flip
         ul.uk-navbar-nav
           li
             a(href='/login') login
 
-    p ICON TEST, LOL&nbsp;
-      i.uk-icon-camera
+    .uk-margin-left.uk-margin-right.uk-margin
+      p
+        button.uk-button.uk-button-danger(data-uk-offcanvas="{target:'#my-id'}") test off-canvas
 
-    .uk-grid
-      .uk-width-1-3 Swearem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque accumsan nisl, a mattis eros vestibulum et. Vestibulum placerat purus ut nibh aliquam fringilla. Aenean et tortor shit, id tempor elit. Vivamus sagittis ornare tempor. Nullam lacinia metus vel diam tempor frig motherfucker bollix porttitor. Vestibulum mollis pellentesque hendrerit. Sed faucibus venenatis accumsan. Quisque ut gravida metus. Nam sed neque magna, in fermentum ligula. Praesent a diam tincidunt odio semper consequat.
-      .uk-width-1-3 Proin pellentesque arse nec massa scelerisque sodales nec non velit. Vestibulum auctor sagittis dick. Morbi sed lorem et odio sagittis pretium euismod sed augue. Ut non lobortis purus. Integer tempus hendrerit erat feugiat auctor. Aliquam convallis imperdiet nunc nec feugiat. In hac habitasse twathole dictumst. Vestibulum vehicula bibendum arcu, id accumsan tellus egestas nec. Ut vehicula dignissim adipiscing. Bastard id magna ballbag nunc sodales laoreet. Aenean sit amet tellus metus, non mattis dui.
-      .uk-width-1-3 Donec eleifend cock in metus convallis sollicitudin venenatis urna pharetra. Ballbag gravida nisi rhoncus lectus porta pellentesque. Mauris ullamcorper, turpis at vulputate vehicula, arcu libero commodo elit, sit amet rhoncus mauris sem non enim. Nulla iaculis sollicitudin mollis. Aliquam commodo, orci rutrum tristique sagittis, nulla elit lacinia arcu, at dictum quam ligula at lacus. Praesent nec metus mi, eget ullamcorper neque. In bollocks habitasse platea dictumst. Sed tempus sagittis cock, vel tristique nibh consequat vitae. In id mi sit amet diam commodo fermentum. Etiam pretium felis sed erat ultricies tempus. Quisque bugger lacus urna, ac rutrum turpis. Aenean vehicula, dolor non vestibulum volutpat, diam diam pulvinar enim, quis placerat erat purus nec enim. Morbi et dolor nisi, eu faucibus sapien. Suspendisse potenti. Proin semper sodales nunc, id venenatis justo condimentum non.
+      .uk-grid
+        .uk-width-1-2 Swearem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque accumsan nisl, a mattis eros vestibulum et. Vestibulum placerat purus ut nibh aliquam fringilla. Aenean et tortor shit, id tempor elit. Vivamus sagittis ornare tempor. Nullam lacinia metus vel diam tempor frig motherfucker bollix porttitor. Vestibulum mollis pellentesque hendrerit. Sed faucibus venenatis accumsan. Quisque ut gravida metus. Nam sed neque magna, in fermentum ligula. Praesent a diam tincidunt odio semper consequat.
+        .uk-width-1-2 Proin pellentesque arse nec massa scelerisque sodales nec non velit. Vestibulum auctor sagittis dick. Morbi sed lorem et odio sagittis pretium euismod sed augue. Ut non lobortis purus. Integer tempus hendrerit erat feugiat auctor. Aliquam convallis imperdiet nunc nec feugiat. In hac habitasse twathole dictumst. Vestibulum vehicula bibendum arcu, id accumsan tellus egestas nec. Ut vehicula dignissim adipiscing. Bastard id magna ballbag nunc sodales laoreet. Aenean sit amet tellus metus, non mattis dui.
+
+      .uk-grid
+        .uk-width-1-3 Swearem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque accumsan nisl, a mattis eros vestibulum et. Vestibulum placerat purus ut nibh aliquam fringilla. Aenean et tortor shit, id tempor elit. Vivamus sagittis ornare tempor. Nullam lacinia metus vel diam tempor frig motherfucker bollix porttitor. Vestibulum mollis pellentesque hendrerit. Sed faucibus venenatis accumsan. Quisque ut gravida metus. Nam sed neque magna, in fermentum ligula. Praesent a diam tincidunt odio semper consequat.
+        .uk-width-1-3 Proin pellentesque arse nec massa scelerisque sodales nec non velit. Vestibulum auctor sagittis dick. Morbi sed lorem et odio sagittis pretium euismod sed augue. Ut non lobortis purus. Integer tempus hendrerit erat feugiat auctor. Aliquam convallis imperdiet nunc nec feugiat. In hac habitasse twathole dictumst. Vestibulum vehicula bibendum arcu, id accumsan tellus egestas nec. Ut vehicula dignissim adipiscing. Bastard id magna ballbag nunc sodales laoreet. Aenean sit amet tellus metus, non mattis dui.
+        .uk-width-1-3 Donec eleifend cock in metus convallis sollicitudin venenatis urna pharetra. Ballbag gravida nisi rhoncus lectus porta pellentesque. Mauris ullamcorper, turpis at vulputate vehicula, arcu libero commodo elit, sit amet rhoncus mauris sem non enim. Nulla iaculis sollicitudin mollis. Aliquam commodo, orci rutrum tristique sagittis, nulla elit lacinia arcu, at dictum quam ligula at lacus. Praesent nec metus mi, eget ullamcorper neque. In bollocks habitasse platea dictumst. Sed tempus sagittis cock, vel tristique nibh consequat vitae.
+
+      .uk-grid
+        .uk-width-1-6
+          p sample chat ->
+        .uk-width-1-4
+          article.uk-comment
+            header.uk-comment-header.uk-animation-slide-left
+              img.uk-comment-avatar(src='https://lh4.ggpht.com/Svz8WkOB0AuQz9OcPUBkL5SyORC4vDl7gHlFnm6TKDFsYs9Pd_ZcfVsGKWJ0ZuoAouU=w300', width='50', height='50')
+              h4.uk-comment-title 9gag is great.
+              div.uk-comment-meta @newfag | Apr 14, 15:44
+
+          article.uk-comment.uk-animation-slide-right
+            header.uk-comment-header
+              img.uk-comment-avatar(src='/images/dogfort-icon.png', width='50', height='50')
+              h4.uk-comment-title banned.
+              div.uk-comment-meta @admin | Apr 14, 15:46
+
+        .uk-width-1-6
+          p sweet chart ->
+        .uk-width-1-4
+          img(src='http://seeingcomplexity.files.wordpress.com/2011/02/bundled-hiearrarchy2.png')
+
+      .uk-grid
+        .uk-width-1-2 Swearem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque accumsan nisl, a mattis eros vestibulum et. Vestibulum placerat purus ut nibh aliquam fringilla. Aenean et tortor shit, id tempor elit. Vivamus sagittis ornare tempor. Nullam lacinia metus vel diam tempor frig motherfucker bollix porttitor. Vestibulum mollis pellentesque hendrerit. Sed faucibus venenatis accumsan. Quisque ut gravida metus. Nam sed neque magna, in fermentum ligula. Praesent a diam tincidunt odio semper consequat.
+        .uk-width-1-2 Proin pellentesque arse nec massa scelerisque sodales nec non velit. Vestibulum auctor sagittis dick. Morbi sed lorem et odio sagittis pretium euismod sed augue. Ut non lobortis purus. Integer tempus hendrerit erat feugiat auctor. Aliquam convallis imperdiet nunc nec feugiat. In hac habitasse twathole dictumst. Vestibulum vehicula bibendum arcu, id accumsan tellus egestas nec. Ut vehicula dignissim adipiscing. Bastard id magna ballbag nunc sodales laoreet. Aenean sit amet tellus metus, non mattis dui.
+
+      .uk-grid
+        .uk-width-1-3 Swearem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam scelerisque accumsan nisl, a mattis eros vestibulum et. Vestibulum placerat purus ut nibh aliquam fringilla. Aenean et tortor shit, id tempor elit. Vivamus sagittis ornare tempor. Nullam lacinia metus vel diam tempor frig motherfucker bollix porttitor. Vestibulum mollis pellentesque hendrerit. Sed faucibus venenatis accumsan. Quisque ut gravida metus. Nam sed neque magna, in fermentum ligula. Praesent a diam tincidunt odio semper consequat.
+        .uk-width-1-3 Proin pellentesque arse nec massa scelerisque sodales nec non velit. Vestibulum auctor sagittis dick. Morbi sed lorem et odio sagittis pretium euismod sed augue. Ut non lobortis purus. Integer tempus hendrerit erat feugiat auctor. Aliquam convallis imperdiet nunc nec feugiat. In hac habitasse twathole dictumst. Vestibulum vehicula bibendum arcu, id accumsan tellus egestas nec. Ut vehicula dignissim adipiscing. Bastard id magna ballbag nunc sodales laoreet. Aenean sit amet tellus metus, non mattis dui.
+        .uk-width-1-3 Donec eleifend cock in metus convallis sollicitudin venenatis urna pharetra. Ballbag gravida nisi rhoncus lectus porta pellentesque. Mauris ullamcorper, turpis at vulputate vehicula, arcu libero commodo elit, sit amet rhoncus mauris sem non enim. Nulla iaculis sollicitudin mollis. Aliquam commodo, orci rutrum tristique sagittis, nulla elit lacinia arcu, at dictum quam ligula at lacus. Praesent nec metus mi, eget ullamcorper neque. In bollocks habitasse platea dictumst. Sed tempus sagittis cock, vel tristique nibh consequat vitae.
+
+      br
+
+      .uk-container.uk-text-center
+        .uk-container-center
+          p.uk-text-small
+            a(href='https://github.com/brianstarke/dogfort') source
+            | &nbsp; | &nbsp;
+            a(href='http://www.cnn.com/2014/04/14/world/asia/malaysia-airlines-plane/index.html?hpt=hp_inthenews') flight 370
+            | &nbsp; | &nbsp;
+            a(href='http://images.fineartamerica.com/images-medium-large/what-are-you-looking-at-mark-papke.jpg') why are you looking here
+
+
+
+#my-id.uk-offcanvas
+  .uk-offcanvas-bar
+    .uk-panel FARTS!
+      img(src='https://lh4.ggpht.com/Svz8WkOB0AuQz9OcPUBkL5SyORC4vDl7gHlFnm6TKDFsYs9Pd_ZcfVsGKWJ0ZuoAouU=w300')
