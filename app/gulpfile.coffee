@@ -17,7 +17,7 @@ paths =
   ]
   less: './less/**/*.less'
   fonts: ['./bower_components/uikit/src/fonts/*.*']
-  images: './images/*.png'
+  images: './images/*.ico'
   dist: '../public'
 
 # clean public folder
