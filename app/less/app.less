@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:300);
-@import '../bower_components/uikit/src/less/uikit';
+@import url(http://fonts.googleapis.com/css?family=Bangers);
+@import '../bower_components/uikit/themes/default/default/uikit';
 @import '../bower_components/uikit/src/less/addons/sticky';
 
 @base-body-font-family: 'Roboto', sans-serif;
@@ -8,3 +9,25 @@
 @navbar-background: #e0958f;
 @navbar-nav-hover-background: #d76e69;
 @navbar-nav-active-background: #d76e69;
+
+.brand-font {
+  font-family: 'Bangers', cursive;
+}
+
+.dogfort-navbar {
+  opacity: 0.97;
+  z-index: 9999999;
+}
+
+.avatar-frame {
+  border: 2px solid #e74c3c;
+}
+.avatar-frame,.avatar-frame img {
+  width: 50px;
+  height: 50px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
+  moz-border-radius: 30px;
+}
+
+

@@ -4,6 +4,7 @@ clean   = require 'gulp-clean'
 coffee  = require 'gulp-coffee'
 less    = require 'gulp-less'
 concat  = require 'gulp-concat'
+uglify  = require 'gulp-uglify'
 
 paths =
   jade: ['**/*.jade', '!node_modules/**/*.jade']
@@ -12,6 +13,7 @@ paths =
     './bower_components/jquery/jquery.min.js'
     './bower_components/uikit/dist/js/uikit.min.js'
     './bower_components/uikit/dist/js/addons/sticky.min.js'
+    './bower_components/angular/angular.min.js'
   ]
   less: './less/**/*.less'
   fonts: ['./bower_components/uikit/src/fonts/*.*']
@@ -36,13 +38,16 @@ gulp.task 'less', ->
     .pipe(gulp.dest(paths.dist + '/styles'))
 
 # compile/concat coffeescript
-gulp.task 'scripts', ->
+gulp.task 'coffee', ->
   gulp.src(paths.coffee)
     .pipe(coffee())
     .pipe(concat('dogfort.js'))
     .pipe(gulp.dest(paths.dist + '/scripts'))
+
+gulp.task 'scripts', ->
   gulp.src(paths.scripts)
-    .pipe(concat('thirdparty.js'))
+    .pipe(uglify())
+    .pipe(concat('thirdparty.min.js'))
     .pipe(gulp.dest(paths.dist + '/scripts'))
 
 # copy fonts
@@ -57,12 +62,12 @@ gulp.task 'images', ->
 
 # rerun the task when a file changes
 gulp.task 'watch', ->
-  gulp.watch paths.scripts, ['scripts']
+  gulp.watch paths.scripts, ['coffee']
   gulp.watch paths.jade, ['jade']
   gulp.watch paths.less, ['less']
   gulp.watch paths.fonts, ['fonts']
 
 # do ALL THE THINGS
-gulp.task 'build', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images']
+gulp.task 'build', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images', 'coffee']
 
-gulp.task 'default', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images', 'watch']
+gulp.task 'default', ['build', 'watch']

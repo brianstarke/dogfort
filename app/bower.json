@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "uikit": "~2.6.0"
+    "uikit": "~2.6.0",
+    "angular": "~1.2.16"
   }
 }
