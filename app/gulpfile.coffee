@@ -14,6 +14,7 @@ paths =
     './bower_components/uikit/dist/js/uikit.min.js'
     './bower_components/uikit/dist/js/addons/sticky.min.js'
     './bower_components/angular/angular.min.js'
+    './bower_components/angular-route/angular-route.min.js'
   ]
   less: './less/**/*.less'
   fonts: ['./bower_components/uikit/src/fonts/*.*']
@@ -68,6 +69,6 @@ gulp.task 'watch', ->
   gulp.watch paths.fonts, ['fonts']
 
 # do ALL THE THINGS
-gulp.task 'build', ['clean', 'jade', 'less', 'fonts', 'scripts', 'images', 'coffee']
+gulp.task 'build', ['clean', 'less', 'fonts', 'scripts', 'images', 'coffee', 'jade']
 
 gulp.task 'default', ['build', 'watch']

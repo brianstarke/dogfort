@@ -1,6 +1,24 @@
 'use strict'
 
-app = angular.module 'dogfort', []
+app = angular.module 'dogfort', [
+  'ngRoute'
+]
+
+app.config ['$routeProvider', ($routeProvider) ->
+  $routeProvider.when '/', {
+    templateUrl: '/partials/main.html'
+    controller: 'ChatCtrl'
+  }
+
+  $routeProvider.when '/login', {
+    templateUrl: '/partials/login.html'
+    controller: 'LoginCtrl'
+  }
+
+  $routeProvider.otherwise {
+    redirectTo: '/'
+  }
+]
 
 app.controller 'ChatCtrl', ($scope) ->
   $scope.chatMessages = [
@@ -20,6 +38,5 @@ app.controller 'ChatCtrl', ($scope) ->
     $scope.$digest()
   , 4000
 
-
-
-
+app.controller 'LoginCtrl', ($scope) ->
+  $scope.nothing = {}
