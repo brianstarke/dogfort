@@ -1,4 +1,50 @@
 extends layout
 
 block content
-  .ng-view
+
+  div(ng-controller='MainCtrl')
+    nav.uk-navbar.uk-navbar-attached.dogfort-navbar(data-uk-sticky)
+      a.uk-navbar-brand.uk-hidden-small.brand-font(href="/") dogfort.v5 &nbsp;
+      span.uk-badge.uk-badge-warning beta
+
+      .uk-navbar-flip(ng-show='isAuthenticated')
+        ul.uk-navbar-nav
+          li
+            a(data-uk-offcanvas="{target:'#menu'}") menu &nbsp;
+              i.uk-icon-ellipsis-v
+
+    .uk-container.uk-margin-left.uk-margin-right.uk-margin
+      form.uk-form(ng-show='!isAuthenticated', ng-submit='login()')
+        input.uk-form-large.uk-form-width-medium(ng-model='user.username', type='text', placeholder='username')
+        input.uk-form-large.uk-form-width-medium(ng-model='user.password', type='password', placeholder='password')
+        button.uk-button.uk-button-large.uk-button-success login
+
+        ul.uk-subnav.uk-subnav-line
+          li
+            a(href='#register', data-uk-modal) register
+          li
+            a(href='/') forgot password?
+
+      .ng-view(ng-show='isAuthenticated')
+
+    #menu.uk-offcanvas
+      .uk-offcanvas-bar.uk-offcanvas-bar-flip
+        .uk-panel
+          a(href="#/logout") logout
+
+    #register.uk-modal
+      .uk-modal-dialog
+        .uk-modal-close.uk-close
+        form.uk-form(ng-submit='register()')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.username', type='text', placeholder='username')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.email', type='text', placeholder='email')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.password', type='password', placeholder='password')
+          .uk-form-row
+            button.uk-button.uk-button-large.uk-button-primary register
+
+
+
+
