@@ -1,40 +1,17 @@
-html(ng-app='dogfort')
-  head
-    title= dogfort
+extends layout
 
-    link(rel='shortcut icon', type='image/x-icon', href='/images/favicon.ico')
+block content
+  div(ng-controller='ChatCtrl')
+    div(ng-repeat="m in chatMessages")
+      article.uk-comment.uk-panel.uk-panel-box.uk-animation-slide-left
+        header.uk-comment-header
+          div.avatar-frame.uk-comment-avatar(display: 'inline-block')
+            img(ng-src="{{m.avatarUrl}}")
+          h4.uk-comment-title {{m.chatText}}
+          ul.uk-comment-meta.uk-subnav.uk-subnav-line
+            li
+              a(href='/') @{{m.username}}
+            li {{m.ts}}
+      br
 
-    link(rel='stylesheet', href='/styles/app.css')
 
-    script(type='text/javascript', src='/scripts/thirdparty.min.js')
-    script(type='text/javascript', src='/scripts/dogfort.js')
-
-  body
-    nav.uk-navbar.uk-navbar-attached.dogfort-navbar(data-uk-sticky)
-      a.uk-navbar-brand.uk-hidden-small.brand-font(href="/") dogfort.v5 &nbsp;
-      span.uk-badge.uk-badge-warning beta
-
-      .uk-navbar-flip
-        ul.uk-navbar-nav
-          li
-            a(data-uk-offcanvas="{target:'#my-id'}") settings
-          li
-            a(href='/login') login
-
-    .uk-container.uk-margin-left.uk-margin-right.uk-margin(ng-controller='ChatCtrl')
-      div(ng-repeat="m in chatMessages")
-        article.uk-comment.uk-panel.uk-panel-box.uk-animation-slide-left
-          header.uk-comment-header
-            div.avatar-frame.uk-comment-avatar(display: 'inline-block')
-              img(ng-src="{{m.avatarUrl}}")
-            h4.uk-comment-title {{m.chatText}}
-            ul.uk-comment-meta.uk-subnav.uk-subnav-line
-              li
-                a(href='/') @{{m.username}}
-              li {{m.ts}}
-        br
-
-#my-id.uk-offcanvas
-  .uk-offcanvas-bar.uk-offcanvas-bar-flip
-    .uk-panel SETTINGS!
-      img(src='https://lh4.ggpht.com/Svz8WkOB0AuQz9OcPUBkL5SyORC4vDl7gHlFnm6TKDFsYs9Pd_ZcfVsGKWJ0ZuoAouU=w300')

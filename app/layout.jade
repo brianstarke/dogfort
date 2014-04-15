@@ -1,0 +1,32 @@
+html(ng-app='dogfort')
+  head
+    title= dogfort
+
+    link(rel='shortcut icon', type='image/x-icon', href='/images/favicon.ico')
+
+    link(rel='stylesheet', href='/styles/app.css')
+
+    script(type='text/javascript', src='/scripts/thirdparty.min.js')
+    script(type='text/javascript', src='/scripts/dogfort.js')
+
+    block head
+
+  body.dogfort-body
+    nav.uk-navbar.uk-navbar-attached.dogfort-navbar(data-uk-sticky)
+      a.uk-navbar-brand.uk-hidden-small.brand-font(href="/") dogfort.v5 &nbsp;
+      span.uk-badge.uk-badge-warning beta
+
+      .uk-navbar-flip
+        ul.uk-navbar-nav
+          li
+            a(data-uk-offcanvas="{target:'#menu'}") menu &nbsp;
+              i.uk-icon-ellipsis-v
+
+    .uk-container.uk-margin-left.uk-margin-right.uk-margin
+
+      block content
+
+#menu.uk-offcanvas
+  .uk-offcanvas-bar.uk-offcanvas-bar-flip
+    .uk-panel SETTINGS?!?!
+      img(src='https://lh4.ggpht.com/Svz8WkOB0AuQz9OcPUBkL5SyORC4vDl7gHlFnm6TKDFsYs9Pd_ZcfVsGKWJ0ZuoAouU=w300')
