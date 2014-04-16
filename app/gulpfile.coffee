@@ -81,7 +81,6 @@ gulp.task 'build', [
 ]
 
 gulp.task 'default', [
-  'clean'
   'less'
   'jade'
   'fonts'

@@ -10,8 +10,10 @@ block content
       .uk-navbar-flip(ng-show='isAuthenticated')
         ul.uk-navbar-nav
           li
-            a(data-uk-offcanvas="{target:'#menu'}") menu &nbsp;
-              i.uk-icon-ellipsis-v
+            a(data-uk-offcanvas="{target:'#menu'}")
+              span.sm-avatar-frame(display: 'inline-block')
+                img(ng-src="http://www.gravatar.com/avatar/{{authedUser.gravatarHash}}?s=20")
+              | &nbsp; @{{authedUser.username}} &nbsp;
 
     .uk-container.uk-margin-left.uk-margin-right.uk-margin
       form.uk-form(ng-show='!isAuthenticated', ng-submit='login()')

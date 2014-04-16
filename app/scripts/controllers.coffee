@@ -23,9 +23,22 @@ app.controller 'ChatCtrl', ($scope) ->
   , 10000
 
 app.controller 'MainCtrl', ($scope, $cookies, User) ->
-  $scope.isAuthenticated = false
+  User.verify($cookies.dogfort_token)
+    .success (data, status, headers, config) ->
+      console.log data
+      $scope.authedUser = data.user
+      $scope.isAuthenticated = true
+    .error (data, status, headers, config) ->
+      console.log data
+      $scope.isAuthenticated = false
 
   $scope.login = () ->
+    User.authenticate($scope.user.username, $scope.user.password)
+      .success (data, status, headers, config) ->
+        $cookies.dogfort_token = data.token
+      .error (data, status, headers, config) ->
+        console.log data
+
     $scope.isAuthenticated = true
 
   $scope.register = () ->
