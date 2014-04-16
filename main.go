@@ -23,6 +23,8 @@ func main() {
 
 	// user routes
 	m.Post("/api/v1/users", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.CreateUser)
+	m.Post("/api/v1/authenticate", binding.Json(domain.AuthenticationRequest{}), binding.ErrorHandler, routes.AuthenticateUser)
+	m.Get("/api/v1/verify/:token", routes.VerifyUser)
 
 	// start server
 	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
