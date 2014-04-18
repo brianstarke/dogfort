@@ -1,0 +1,40 @@
+div(ng-controller='ChannelsCtrl')
+  .uk-container.uk-margin-left.uk-margin-right.uk-margin
+    .uk-grid
+      .uk-width-1-2
+        h2 channels
+      .uk-width-1-2
+        a(href='#create', data-uk-modal).uk-button.uk-button-primary.uk-float-right create new channel
+
+    table.uk-table.uk-table-striped.uk-table-condensed
+      thead
+        tr
+          th channel name
+          th description
+          th members
+      tbody
+        tr(ng-repeat='c in channels')
+          td {{c.name}}&nbsp;
+            div(ng-if='c.isPrivate').uk-badge.uk-badge-warning private
+            | &nbsp;
+            div(ng-if='c.members.indexOf(authedUser.uid) != -1').uk-badge.uk-badge-primary subscribed
+          td {{c.description}}
+          td {{c.members.length}}
+
+  #create.uk-modal
+    .uk-modal-dialog
+      .uk-modal-close.uk-close
+      form.uk-form(ng-submit='create()')
+        .uk-form-row
+          input.uk-form-large.uk-form-width-medium(ng-model='newchannel.name', type='text', placeholder='name')
+        .uk-form-row
+          input.uk-form-large.uk-form-width-large(ng-model='newchannel.description', type='text', placeholder='description')
+        .uk-form-row
+          label(for='isPrivate') private? &nbsp;
+          input(ng-model='newchannel.isPrivate', type='checkbox', name='isPrivate')
+        .uk-form-row
+          button.uk-button.uk-button-large.uk-button-primary create
+
+
+
+

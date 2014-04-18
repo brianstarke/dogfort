@@ -15,12 +15,14 @@ import (
 	"labix.org/v2/mgo/bson"
 )
 
+type UserUid string
+
 type User struct {
-	Uid          string `json:"uid"`
-	Email        string `json:"email"`
-	Username     string `json:"username"`
-	PasswordHash string `json:"passwordHash,omitempty"`
-	GravatarHash string `json:"gravatarHash"`
+	Uid          UserUid `json:"uid"`
+	Email        string  `json:"email"`
+	Username     string  `json:"username"`
+	PasswordHash string  `json:"passwordHash,omitempty"`
+	GravatarHash string  `json:"gravatarHash"`
 }
 
 type NewUser struct {
@@ -41,7 +43,7 @@ type UserDomain struct {
 /*
 Creates a User from a NewUser struct.  Returns the new user's UID
 */
-func (ud UserDomain) CreateUser(newUser *NewUser) (*string, error) {
+func (ud UserDomain) CreateUser(newUser *NewUser) (*UserUid, error) {
 	// check to see if this user already exists
 	n, err := ud.Collection.Find(bson.M{"$or": []bson.M{bson.M{"email": newUser.Email}, bson.M{"username": newUser.Username}}}).Count()
 
@@ -68,7 +70,7 @@ func (ud UserDomain) CreateUser(newUser *NewUser) (*string, error) {
 	}
 
 	user := User{}
-	user.Uid = uid.String()
+	user.Uid = UserUid(uid.String())
 	user.Email = newUser.Email
 	user.Username = newUser.Username
 	user.PasswordHash = string(b)
@@ -118,7 +120,7 @@ func (ud UserDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
 	}
 }
 
-func (ud UserDomain) UserByUid(uid string) (*User, error) {
+func (ud UserDomain) UserByUid(uid UserUid) (*User, error) {
 	u := User{}
 	err := ud.Collection.Find(bson.M{"uid": uid}).One(&u)
 
@@ -130,33 +132,31 @@ func (ud UserDomain) UserByUid(uid string) (*User, error) {
 	}
 }
 
-/*
-Verify a token and return user
-*/
-func (ud UserDomain) Verify(token string) (*User, error) {
-	t, err := jwt.Parse(token, func(token *jwt.Token) ([]byte, error) {
-		// validate date here?
-
-		return []byte("dogfort"), nil
-	})
-
-	if err != nil || !t.Valid {
-		return nil, fmt.Errorf("error validating token [%s] %s", t.Valid, err.Error())
-	}
-
-	u, err := ud.UserByUid(string(t.Header["user_id"].(string)))
-
-	if err != nil {
-		return nil, err
-	} else {
-		return u, nil
-	}
-}
-
 func getGravatarHash(email *string) string {
 	hasher := md5.New()
 
 	hasher.Write([]byte(strings.ToLower(*email)))
 
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+/*
+Parses a token, returns user id if valid
+*/
+func getUserUidFromToken(token string) (*UserUid, error) {
+	t, err := jwt.Parse(token, func(token *jwt.Token) ([]byte, error) {
+		return []byte("dogfort"), nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("error parsing token: %s", err.Error())
+	} else {
+		if t.Valid {
+			uid := UserUid(t.Header["user_id"].(string))
+
+			return &uid, nil
+		} else {
+			return nil, fmt.Errorf("token is not valid: %s", err.Error())
+		}
+	}
 }

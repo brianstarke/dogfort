@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/brianstarke/dogfort/domain"
-	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 )
 
@@ -31,8 +30,8 @@ func AuthenticateUser(userDomain *domain.UserDomain, ar domain.AuthenticationReq
 	}
 }
 
-func VerifyUser(userDomain *domain.UserDomain, params martini.Params, r render.Render) {
-	u, err := userDomain.Verify(params["token"])
+func GetAuthenticatedUser(userDomain *domain.UserDomain, userUid domain.UserUid, r render.Render) {
+	u, err := userDomain.UserByUid(userUid)
 
 	if err != nil {
 		r.JSON(400, err.Error())

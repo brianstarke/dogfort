@@ -1,0 +1,10 @@
+form.uk-form(ng-submit='login()')
+  input.uk-form-large.uk-form-width-medium(ng-model='user.username', type='text', placeholder='username')
+  input.uk-form-large.uk-form-width-medium(ng-model='user.password', type='password', placeholder='password')
+  button.uk-button.uk-button-large.uk-button-success login
+
+  ul.uk-subnav.uk-subnav-line
+    li
+      a(href='#register', data-uk-modal) register
+    li
+      a(href='/') forgot password?

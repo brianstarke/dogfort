@@ -1,4 +1,6 @@
-app = angular.module 'dogfort.services', []
+app = angular.module 'dogfort.services', [
+  'ngCookies'
+]
 
 app.factory 'User', ['$http', ($http) ->
   new class User
@@ -14,7 +16,32 @@ app.factory 'User', ['$http', ($http) ->
         password: password
       }
 
-    verify: (token) ->
-      $http.get @baseUrl + '/verify/' + token
+    getAuthedUser: ->
+      $http.get @baseUrl + '/user'
 ]
 
+app.factory 'Channel', ['$http', ($http) ->
+  new class Channel
+    constructor: ->
+      @baseUrl = '/api/v1/channels'
+
+    list: ->
+      $http.get @baseUrl
+
+    create: (newChannel) ->
+      $http.post @baseUrl, newChannel
+]
+
+app.factory 'authInterceptor',  ['$q', '$cookies', ($q, $cookies) ->
+  request: (config) ->
+    config.headers = config.headers or {}
+
+    if $cookies.dogfort_token
+      config.headers.Authorization = $cookies.dogfort_token
+    config
+  response: (response) ->
+    #if response.status is 401
+      # redirect to login
+
+    response or $q.when(response)
+]
