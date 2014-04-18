@@ -53,6 +53,7 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
         $cookies.dogfort_token = data.token
         $location.path '/channels'
         $rootScope.isAuthenticated = true
+        $rootScope.setAuthedUser()
       .error (data, status, headers, config) ->
         console.log data
 
@@ -68,14 +69,17 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
     )
 
 app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
-  User.getAuthedUser()
-    .success (data, status, headers, config) ->
-      $rootScope.authedUser = data.user
-      $rootScope.isAuthenticated = true
-      $location.path '/channels'
-    .error (data, status, headers, config) ->
-      $rootScope.isAuthenticated = false
-      $location.path '/login'
+  $rootScope.setAuthedUser = () ->
+    User.getAuthedUser()
+      .success (data, status, headers, config) ->
+        $rootScope.authedUser = data.user
+        $rootScope.isAuthenticated = true
+        $location.path '/channels'
+      .error (data, status, headers, config) ->
+        $rootScope.isAuthenticated = false
+        $location.path '/login'
+
+  $rootScope.setAuthedUser()
 
   $scope.logout = () ->
     delete $cookies['dogfort_token']
