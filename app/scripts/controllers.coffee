@@ -46,24 +46,15 @@ app.controller 'ChannelsCtrl', ($scope, Channel) ->
       console.log data
     )
 
-app.controller 'MainCtrl', ($scope, $cookies, $location, User) ->
-  User.getAuthedUser()
-    .success (data, status, headers, config) ->
-      $scope.authedUser = data.user
-      $scope.isAuthenticated = true
-      $location.path '/channels'
-    .error (data, status, headers, config) ->
-      $scope.isAuthenticated = false
-      $location.path '/login'
-
+app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
   $scope.login = () ->
     User.authenticate($scope.user.username, $scope.user.password)
       .success (data, status, headers, config) ->
         $cookies.dogfort_token = data.token
+        $location.path '/channels'
+        $rootScope.isAuthenticated = true
       .error (data, status, headers, config) ->
         console.log data
-
-    $scope.isAuthenticated = true
 
   $scope.register = () ->
     User.create({
@@ -76,6 +67,19 @@ app.controller 'MainCtrl', ($scope, $cookies, $location, User) ->
       console.log data
     )
 
+app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
+  User.getAuthedUser()
+    .success (data, status, headers, config) ->
+      $rootScope.authedUser = data.user
+      $rootScope.isAuthenticated = true
+      $location.path '/channels'
+    .error (data, status, headers, config) ->
+      $rootScope.isAuthenticated = false
+      $location.path '/login'
 
-
+  $scope.logout = () ->
+    delete $cookies['dogfort_token']
+    delete $rootScope['authedUser']
+    $rootScope.isAuthenticated = false
+    $location.path '/login'
 

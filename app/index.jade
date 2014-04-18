@@ -20,23 +20,4 @@ block content
   #menu.uk-offcanvas
     .uk-offcanvas-bar.uk-offcanvas-bar-flip
       .uk-panel
-        a(href="#/logout") logout
-
-  #register.uk-modal
-    .uk-modal-dialog
-      .uk-modal-close.uk-close
-      form.uk-form(ng-submit='register()')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.username', type='text', placeholder='username')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.email', type='text', placeholder='email')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.password', type='password', placeholder='password')
-        .uk-form-row
-          button.uk-button.uk-button-large.uk-button-primary register
-
-
-
-
-
-
+        button.uk-button(ng-click='logout()') logout
