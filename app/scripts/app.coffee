@@ -1,5 +1,6 @@
 app = angular.module 'dogfort', [
   'ngRoute'
+  'toastr'
 
   'dogfort.controllers'
   'dogfort.services'
@@ -20,4 +21,10 @@ app.config ['$routeProvider', '$httpProvider', ($routeProvider, $httpProvider) -
   $routeProvider.otherwise {
     redirectTo: '/channels'
   }
+
+  positionClass: 'toast-top-right'
+]
+
+app.config ['toastrConfig', (toastrConfig) ->
+  toastrConfig.positionClass = 'toast-bottom-full-width'
 ]

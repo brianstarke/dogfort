@@ -22,13 +22,15 @@ app.controller 'ChatCtrl', ($scope) ->
     $scope.$digest()
   , 10000
 
-app.controller 'ChannelsCtrl', ($scope, Channel) ->
+app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
+  modal = new $.UIkit.modal.Modal("#create")
+
   refreshChannels = () ->
     Channel.list()
       .success (data, status, headers, config) ->
         $scope.channels = data.channels
       .error (data, status, headers, config) ->
-        console.log data
+        toastr.error(data, 'ERROR')
 
   refreshChannels()
 
@@ -38,15 +40,16 @@ app.controller 'ChannelsCtrl', ($scope, Channel) ->
       description: $scope.newchannel.description
       isPrivate: $scope.newchannel.isPrivate
     }).success((data, status, headers, config) ->
-      modal = new $.UIkit.modal.Modal("#create")
       modal._hide()
       $scope.newchannel = {}
       refreshChannels()
+      toastr.success('Channel created!', 'SUCCESS')
     ).error((data, status, headers, config) ->
-      console.log data
+      modal._hide()
+      toastr.error(data, 'ERROR')
     )
 
-app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
+app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User, toastr) ->
   $scope.login = () ->
     User.authenticate($scope.user.username, $scope.user.password)
       .success (data, status, headers, config) ->
@@ -54,8 +57,9 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
         $location.path '/channels'
         $rootScope.isAuthenticated = true
         $rootScope.setAuthedUser()
+        toastr.success('Authenticated', 'SUCCESS')
       .error (data, status, headers, config) ->
-        console.log data
+        toastr.error(data, 'ERROR')
 
   $scope.register = () ->
     User.create({
@@ -64,8 +68,9 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User) ->
       password: $scope.newuser.password
     }).success((data, status, headers, config) ->
       $location.path '/login'
+      toastr.success('User created successfully, now login!', 'SUCCESS')
     ).error((data, status, headers, config) ->
-      console.log data
+      toastr.error(data, 'ERROR')
     )
 
 app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
