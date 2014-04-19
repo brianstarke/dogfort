@@ -9,21 +9,24 @@ app = angular.module 'dogfort', [
 app.config ['$routeProvider', '$httpProvider', ($routeProvider, $httpProvider) ->
   $httpProvider.interceptors.push 'authInterceptor'
 
-  $routeProvider.when '/channels', {
-    templateUrl: '/partials/channels.html'
-    controller: 'ChatCtrl'
-  }
-
   $routeProvider.when '/login', {
     templateUrl: '/partials/login.html'
     controller: 'LoginCtrl'
   }
 
+  $routeProvider.when '/channels', {
+    templateUrl: '/partials/channels.html'
+    controller: 'ChannelsCtrl'
+  }
+
+  $routeProvider.when '/chat', {
+    templateUrl: '/partials/chat.html'
+    controller: 'ChatCtrl'
+  }
+
   $routeProvider.otherwise {
     redirectTo: '/login'
   }
-
-  positionClass: 'toast-top-right'
 ]
 
 app.config ['toastrConfig', (toastrConfig) ->

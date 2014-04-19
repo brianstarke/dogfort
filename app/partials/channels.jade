@@ -10,30 +10,43 @@ div(ng-controller='ChannelsCtrl')
       thead
         tr
           th channel name
+          th
           th description
           th members
+          th
       tbody
         tr(ng-repeat='c in channels')
-          td {{c.name}}&nbsp;
-            div(ng-if='c.isPrivate').uk-badge.uk-badge-warning private
-            | &nbsp;
-            div(ng-if='c.members.indexOf(authedUser.uid) != -1').uk-badge.uk-badge-primary subscribed
+          td {{c.name}}
+          td
+            span(ng-if='c.isPrivate')
+              span.uk-badge.uk-badge-warning private
+              | &nbsp;
+            span(ng-if='c.members.indexOf(authedUser.uid) != -1').uk-badge.uk-badge-primary subscribed
           td {{c.description}}
           td {{c.members.length}}
+          td
+            span(ng-if='c.members.indexOf(authedUser.uid) == -1')
+              button.uk-button.uk-button-mini.uk-button-primary(ng-if='c.isPrivate') request membership
+              button.uk-button.uk-button-mini.uk-button-success(ng-if='!c.isPrivate') join
+            span(ng-if='c.members.indexOf(authedUser.uid) != -1')
+              button.uk-button.uk-button-mini.uk-button-danger unsubscribe
 
   #create.uk-modal
     .uk-modal-dialog
       .uk-modal-close.uk-close
       form.uk-form(ng-submit='create()')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newchannel.name', type='text', placeholder='name')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-large(ng-model='newchannel.description', type='text', placeholder='description')
-        .uk-form-row
-          label(for='isPrivate') private? &nbsp;
-          input(ng-model='newchannel.isPrivate', type='checkbox', name='isPrivate')
-        .uk-form-row
-          button.uk-button.uk-button-large.uk-button-primary create
+        fieldset(data-uk-margin)
+          legend create new channel
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newchannel.name', type='text', placeholder='name')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-large(ng-model='newchannel.description', type='text', placeholder='description')
+          .uk-form-row
+            label.uk-form-large.uk-form-width-medium
+              input(ng-model='newchannel.isPrivate', type='checkbox', name='isPrivate')
+              | &nbsp;private?
+          .uk-form-row
+            button.uk-button.uk-button-large.uk-button-primary create
 
 
 

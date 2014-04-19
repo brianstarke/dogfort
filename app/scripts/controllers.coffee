@@ -4,10 +4,10 @@ app = angular.module 'dogfort.controllers', [
   'dogfort.services'
 ]
 
-app.controller 'ChatCtrl', ($scope) ->
+app.controller 'ChatCtrl', ($scope, $location, $anchorScroll) ->
   $scope.chatMessages = [
     avatarUrl: 'http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=50'
-    chatText: 'Monkeyfighting shoot mothercrusher fudge shoot.'
+    chatText: 'testing'
     username: 'someone'
     ts: '4 minutes ago'
   ]
@@ -20,7 +20,21 @@ app.controller 'ChatCtrl', ($scope) ->
       ts: 'just now'
     }
     $scope.$digest()
+    $location.hash 'bottom'
+    $anchorScroll()
   , 10000
+
+  setInterval ->
+    $scope.chatMessages.push {
+      avatarUrl: 'http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=50'
+      chatText: 'testing again'
+      username: 'someone'
+      ts: 'just now'
+    }
+    $scope.$digest()
+    $location.hash 'bottom'
+    $anchorScroll()
+  , 9000
 
 app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
   modal = new $.UIkit.modal.Modal("#create")
@@ -82,7 +96,7 @@ app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
       .success (data, status, headers, config) ->
         $rootScope.authedUser = data.user
         $rootScope.isAuthenticated = true
-        $location.path '/channels'
+        $location.path '/chat'
       .error (data, status, headers, config) ->
         $rootScope.isAuthenticated = false
         $location.path '/login'
@@ -92,6 +106,9 @@ app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
   $scope.logout = () ->
     delete $cookies['dogfort_token']
     delete $rootScope['authedUser']
+
     $rootScope.isAuthenticated = false
     $location.path '/login'
 
+  # for highlighting active tab on navbar
+  $scope.isActive = (viewLocation) -> viewLocation == $location.path()
