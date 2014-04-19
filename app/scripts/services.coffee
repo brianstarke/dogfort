@@ -32,7 +32,7 @@ app.factory 'Channel', ['$http', ($http) ->
       $http.post @baseUrl, newChannel
 ]
 
-app.factory 'authInterceptor',  ['$q', '$cookies', ($q, $cookies) ->
+app.factory 'authInterceptor',  ['$q', '$cookies', '$location', ($q, $cookies, $location) ->
   request: (config) ->
     config.headers = config.headers or {}
 
@@ -40,8 +40,9 @@ app.factory 'authInterceptor',  ['$q', '$cookies', ($q, $cookies) ->
       config.headers.Authorization = $cookies.dogfort_token
     config
   response: (response) ->
-    #if response.status is 401
-      # redirect to login
+    if response.status is 401
+      $location.path '/login'
+      console.log 'etf'
 
     response or $q.when(response)
 ]

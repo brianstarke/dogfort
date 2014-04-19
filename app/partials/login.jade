@@ -1,25 +1,32 @@
 div(ng-controller='LoginCtrl')
   .uk-container.uk-margin-left.uk-margin-right.uk-margin
     form.uk-form(ng-submit='login()')
-      input.uk-form-large.uk-form-width-medium(ng-model='user.username', type='text', placeholder='username')
-      input.uk-form-large.uk-form-width-medium(ng-model='user.password', type='password', placeholder='password')
-      button.uk-button.uk-button-large.uk-button-success login
+      fieldset(data-uk-margin)
+        legend login
+        .uk-form-row
+          input.uk-form-large.uk-form-width-medium(ng-model='user.username', type='text', placeholder='username')
+        .uk-form-row
+          input.uk-form-large.uk-form-width-medium(ng-model='user.password', type='password', placeholder='password')
+        .uk-form-row
+          button.uk-button.uk-button-large.uk-button-success login
 
       ul.uk-subnav.uk-subnav-line
         li
-          a(href='#register', data-uk-modal) register
+          button.uk-button(data-uk-modal="{target:'#register'}") register
         li
-          a(href='http://s3.amazonaws.com/puricute.answers/2012/07/23/aa2debe42f2aa93739526e1db3bcb59c5.jpg') forgot password?
+          button.uk-button forgot password?
 
   #register.uk-modal
     .uk-modal-dialog
       .uk-modal-close.uk-close
       form.uk-form(ng-submit='register()')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.username', type='text', placeholder='username')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.email', type='text', placeholder='email')
-        .uk-form-row
-          input.uk-form-large.uk-form-width-medium(ng-model='newuser.password', type='password', placeholder='password')
-        .uk-form-row
-          button.uk-button.uk-button-large.uk-button-primary register
+        fieldset(data-uk-margin)
+          legend register
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.username', type='text', placeholder='username')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.email', type='text', placeholder='email')
+          .uk-form-row
+            input.uk-form-large.uk-form-width-medium(ng-model='newuser.password', type='password', placeholder='password')
+          .uk-form-row
+            button.uk-button.uk-button-large.uk-button-primary register

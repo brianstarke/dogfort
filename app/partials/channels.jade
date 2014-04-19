@@ -4,7 +4,7 @@ div(ng-controller='ChannelsCtrl')
       .uk-width-1-2
         h2 channels
       .uk-width-1-2
-        a(href='#create', data-uk-modal).uk-button.uk-button-primary.uk-float-right create new channel
+        button.uk-button.uk-button-primary.uk-float-right(data-uk-modal="{target:'#create'}") create new channel
 
     table.uk-table.uk-table-striped.uk-table-condensed
       thead

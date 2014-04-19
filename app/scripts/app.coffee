@@ -16,10 +16,11 @@ app.config ['$routeProvider', '$httpProvider', ($routeProvider, $httpProvider) -
 
   $routeProvider.when '/login', {
     templateUrl: '/partials/login.html'
+    controller: 'LoginCtrl'
   }
 
   $routeProvider.otherwise {
-    redirectTo: '/channels'
+    redirectTo: '/login'
   }
 
   positionClass: 'toast-top-right'

@@ -50,6 +50,8 @@ app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
     )
 
 app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User, toastr) ->
+  modal = new $.UIkit.modal.Modal("#register")
+
   $scope.login = () ->
     User.authenticate($scope.user.username, $scope.user.password)
       .success (data, status, headers, config) ->
@@ -57,7 +59,7 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User, toas
         $location.path '/channels'
         $rootScope.isAuthenticated = true
         $rootScope.setAuthedUser()
-        toastr.success('Authenticated', 'SUCCESS')
+        toastr.success('Authenticated', 'success')
       .error (data, status, headers, config) ->
         toastr.error(data, 'ERROR')
 
@@ -68,7 +70,8 @@ app.controller 'LoginCtrl', ($rootScope, $scope, $cookies, $location, User, toas
       password: $scope.newuser.password
     }).success((data, status, headers, config) ->
       $location.path '/login'
-      toastr.success('User created successfully, now login!', 'SUCCESS')
+      modal._hide()
+      toastr.success('User created successfully, login', 'success')
     ).error((data, status, headers, config) ->
       toastr.error(data, 'ERROR')
     )
