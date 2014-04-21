@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"os"
-
+	"runtime"
 	"github.com/brianstarke/dogfort/domain"
 	"github.com/brianstarke/dogfort/routes"
 	"github.com/go-martini/martini"
@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	m := martini.Classic()
 
 	// JSON rendering middleware
