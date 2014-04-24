@@ -4,37 +4,57 @@ app = angular.module 'dogfort.controllers', [
   'dogfort.services'
 ]
 
-app.controller 'ChatCtrl', ($scope, $location, $anchorScroll) ->
-  $scope.chatMessages = [
-    avatarUrl: 'http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=50'
-    chatText: 'testing'
-    username: 'someone'
-    ts: '4 minutes ago'
-  ]
+app.controller 'ChatCtrl', ($scope, $location, $anchorScroll, Channel, Message, User) ->
+  $scope.channels = {}
+  $scope.messages = []
+  $scope.currentChannel = ''
 
-  setInterval ->
-    $scope.chatMessages.push {
-      avatarUrl: 'http://www.gravatar.com/avatar/9f6fe08431ce0e906f6b2e7dd5c9a812?s=50'
-      chatText: 'bloop'
-      username: 'starke'
-      ts: 'just now'
-    }
-    $scope.$digest()
-    $location.hash 'bottom'
-    $anchorScroll()
-  , 10000
+  $scope.isActive = (channelId) -> channelId == $scope.currentChannel
 
-  setInterval ->
-    $scope.chatMessages.push {
-      avatarUrl: 'http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=50'
-      chatText: 'testing again'
-      username: 'someone'
-      ts: 'just now'
-    }
-    $scope.$digest()
-    $location.hash 'bottom'
-    $anchorScroll()
-  , 9000
+  getChannels = () ->
+    Channel.userChannels()
+      .success (data, status, headers, config) ->
+        $scope.currentChannel = data.channels[0].uid
+        console.log $scope.currentChannel
+        console.log data.channels
+
+        for channel in data.channels
+          $scope.channels[channel.uid] = {}
+          $scope.channels[channel.uid].channel = channel
+
+        getMessages()
+
+  $scope.changeChannel = (channelId) ->
+    $scope.currentChannel = channelId
+
+    getMessages()
+
+  getMessages = () ->
+    $scope.messages = []
+
+    Message.forChannel($scope.currentChannel)
+      .success (data, status, headers, config) ->
+        for message in data
+          addMessage message
+
+  addMessage = (message) ->
+    User.byId(message.userId)
+      .success (data, status, headers, config) ->
+        message.user = data
+        $scope.messages.push message
+
+        # just in case
+        $scope.messages = $scope.messages.sort (a,b) -> a.timestamp > b.timestamp
+
+      .error (data, status, headers, config) ->
+        console.log data
+
+  $scope.sendMessage = () ->
+    Message.send($scope.message, $scope.currentChannel)
+      .success (data, status, headers, config) ->
+        $scope.message = ''
+
+  getChannels()
 
 app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
   modal = new $.UIkit.modal.Modal("#create")

@@ -82,3 +82,23 @@ func (cd ChannelDomain) GetUserChannels(userUid *UserUid) (*[]Channel, error) {
 		return &c, nil
 	}
 }
+
+/*
+Checks if the user is in this channel
+*/
+func (cd ChannelDomain) UserInChannel(userUid *UserUid, channelId string) (bool, error) {
+	c := Channel{}
+
+	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c)
+
+	if err != nil {
+		return false, err
+	} else {
+		for _, u := range c.Members {
+			if u == *userUid {
+				return true, nil
+			}
+		}
+		return false, nil
+	}
+}

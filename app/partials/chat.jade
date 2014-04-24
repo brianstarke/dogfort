@@ -1,27 +1,31 @@
-div(ng-controller='ChatCtrl')
+div
   .uk-container.uk-margin-left.uk-margin-right.uk-margin
     .uk-grid
       .uk-width-1-5
-        h5 your channels
+        h3 your channels
 
-        ul.uk-nav.uk-nav-side
-          li.uk-active
-            a(href='#') dogfort updates
-          li
-            a(href='#') test private &nbsp;
-              span.uk-badge.uk-badge-danger.uk-badge-notification 18
+        ul.uk-tab.uk-tab-left
+          li(ng-repeat="c in channels", ng-class="{ 'uk-active': isActive(c.channel.uid)}")
+            a(ng-click="changeChannel(c.channel.uid)") {{c.channel.name}}
 
-      .uk-width-4-5.uk-overflow-container
-        div(ng-repeat="m in chatMessages")
-          article.uk-comment.uk-panel.uk-panel-box.uk-animation-slide-left
-            header.uk-comment-header
-              div.avatar-frame.uk-comment-avatar(display: 'inline-block')
-                img(ng-src="{{m.avatarUrl}}")
-              h4.uk-comment-title {{m.chatText}}
-              ul.uk-comment-meta.uk-subnav.uk-subnav-line
-                li
-                  a(href='/') @{{m.username}}
-                li {{m.ts}}
-          br
-        a#bottom
+      .uk-width-4-5
+        form.uk-form(ng-submit='sendMessage()')
+          input.uk-form-large.uk-form-width-large(ng-model='message', type='text', placeholder='say something...')
+        br
+        div.uk-overflow-container
+          div(ng-repeat="m in messages")
+            article.uk-comment.uk-panel.uk-panel-box.uk-animation-slide-left
+              header.uk-comment-header
+                div.avatar-frame.uk-comment-avatar(display: 'inline-block')
+                  img(ng-src="http://www.gravatar.com/avatar/{{m.user.gravatarHash}}?s=50")
+                h4.uk-comment-title {{m.text}}
+                ul.uk-comment-meta.uk-subnav.uk-subnav-line
+                  li
+                    a(href='/')
+                      span @{{m.user.username}}
+                  li
+                    span(am-time-ago="m.timestamp", am-preprocess="unix")
+            br
+          a#bottom
+
 

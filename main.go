@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+
 	"github.com/brianstarke/dogfort/domain"
 	"github.com/brianstarke/dogfort/routes"
 	"github.com/go-martini/martini"
@@ -26,10 +27,16 @@ func main() {
 	m.Post("/api/v1/users", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.CreateUser)
 	m.Post("/api/v1/authenticate", binding.Json(domain.AuthenticationRequest{}), binding.ErrorHandler, routes.AuthenticateUser)
 	m.Get("/api/v1/user", domain.AuthenticationMiddleware, routes.GetAuthenticatedUser) // who am I?!
+	m.Get("/api/v1/users/:userId", domain.AuthenticationMiddleware, routes.GetUserById)
 
 	// channel routes
 	m.Post("/api/v1/channels", domain.AuthenticationMiddleware, binding.Json(domain.Channel{}), binding.ErrorHandler, routes.CreateChannel)
 	m.Get("/api/v1/channels", domain.AuthenticationMiddleware, routes.ListChannels)
+	m.Get("/api/v1/channels/user", domain.AuthenticationMiddleware, routes.GetUserChannels)
+
+	// message routes
+	m.Get("/api/v1/messages/:channelId", domain.AuthenticationMiddleware, routes.MessagesByChannel)
+	m.Post("/api/v1/messages", domain.AuthenticationMiddleware, binding.Json(domain.Message{}), binding.ErrorHandler, routes.CreateMessage)
 
 	// start server
 	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))

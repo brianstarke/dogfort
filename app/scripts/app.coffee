@@ -1,6 +1,7 @@
 app = angular.module 'dogfort', [
   'ngRoute'
   'toastr'
+  'angularMoment'
 
   'dogfort.controllers'
   'dogfort.services'

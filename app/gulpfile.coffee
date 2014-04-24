@@ -18,6 +18,8 @@ paths =
     './bower_components/angular-cookies/angular-cookies.min.js'
     './bower_components/angular-resource/angular-resource.min.js'
     './bower_components/angular-toastr/dist/angular-toastr.min.js'
+    './bower_components/moment/min/moment.min.js'
+    './bower_components/angular-moment/angular-moment.min.js'
   ]
   less: './less/**/*.less'
   fonts: ['./bower_components/uikit/src/fonts/*.*']

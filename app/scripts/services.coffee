@@ -16,8 +16,26 @@ app.factory 'User', ['$http', ($http) ->
         password: password
       }
 
+    byId: (userId) ->
+      $http.get @baseUrl + '/users/' + userId
+
     getAuthedUser: ->
       $http.get @baseUrl + '/user'
+]
+
+app.factory 'Message', ['$http', ($http) ->
+  new class Message
+    constructor: ->
+      @baseUrl = '/api/v1/messages'
+
+    send: (text, channelId) ->
+      $http.post @baseUrl, {
+        text      : text
+        channelId : channelId
+      }
+
+    forChannel: (channelId) ->
+      $http.get @baseUrl + "/" + channelId
 ]
 
 app.factory 'Channel', ['$http', ($http) ->
@@ -27,6 +45,10 @@ app.factory 'Channel', ['$http', ($http) ->
 
     list: ->
       $http.get @baseUrl
+
+    # channels this user is in
+    userChannels: ->
+      $http.get @baseUrl + '/user'
 
     create: (newChannel) ->
       $http.post @baseUrl, newChannel

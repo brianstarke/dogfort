@@ -13,6 +13,7 @@ import (
 var (
 	usersCollection    = "users"
 	channelsCollection = "channels"
+	messagesCollection = "messages"
 )
 
 /*
@@ -23,10 +24,12 @@ func DomainMiddleware() martini.Handler {
 
 	userDomain := &UserDomain{db.C(usersCollection)}
 	channelDomain := &ChannelDomain{db.C(channelsCollection)}
+	messageDomain := &MessageDomain{db.C(messagesCollection)}
 
 	return func(context martini.Context) {
 		context.Map(userDomain)
 		context.Map(channelDomain)
+		context.Map(messageDomain)
 
 		context.Next()
 	}

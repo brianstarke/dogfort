@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/brianstarke/dogfort/domain"
+	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 )
 
@@ -37,5 +38,15 @@ func GetAuthenticatedUser(userDomain *domain.UserDomain, userUid domain.UserUid,
 		r.JSON(400, err.Error())
 	} else {
 		r.JSON(200, map[string]interface{}{"user": u})
+	}
+}
+
+func GetUserById(userDomain *domain.UserDomain, params martini.Params, r render.Render) {
+	u, err := userDomain.UserByUid(domain.UserUid(params["userId"]))
+
+	if err != nil {
+		r.JSON(400, err.Error())
+	} else {
+		r.JSON(200, u)
 	}
 }
