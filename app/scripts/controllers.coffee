@@ -141,7 +141,12 @@ app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
 
   connectToSocket = () ->
     if window["WebSocket"]
-      console.log 'browser supports WebSockets'
+      conn = new WebSocket 'ws://localhost:9000/ws/connect'
+      conn.onclose = (event) ->
+        console.log 'socket connection closed'
+
+      conn.onmessage = (event) ->
+        console.log event.data
     else
       alert "Your browser doesn't support WebSockets, this app will suck for you."
 

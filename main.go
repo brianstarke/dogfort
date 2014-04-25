@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/brianstarke/dogfort/domain"
+	"github.com/brianstarke/dogfort/hub"
 	"github.com/brianstarke/dogfort/routes"
 	"github.com/go-martini/martini"
 	_ "github.com/joho/godotenv/autoload" // load all .env variables
@@ -15,6 +16,11 @@ import (
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	// start hub
+	go hub.H.Run()
+
+	// map routes
 	m := martini.Classic()
 
 	// JSON rendering middleware
@@ -40,7 +46,11 @@ func main() {
 	m.Get("/api/v1/messages/:channelId", domain.AuthenticationMiddleware, routes.MessagesByChannel)
 	m.Post("/api/v1/messages", domain.AuthenticationMiddleware, binding.Json(domain.Message{}), binding.ErrorHandler, routes.CreateMessage)
 
+	// socket connector
+	m.Get("/ws/connect", hub.WsHandler)
+
 	// start server
 	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	m.Run()
+
 }
