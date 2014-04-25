@@ -51,6 +51,7 @@ app.controller 'ChatCtrl', ($scope, $location, $anchorScroll, Channel, Message, 
     Message.send($scope.message, $scope.currentChannel)
       .success (data, status, headers, config) ->
         $scope.message = ''
+        getMessages()
 
   getChannels()
 
@@ -70,6 +71,7 @@ app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
     Channel.join(channelId)
       .success () ->
         toastr.success('Channel joined', 'SUCCESS')
+        refreshChannels()
       .error (data) ->
         toastr.error(data, 'ERROR')
 
@@ -77,6 +79,7 @@ app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
     Channel.leave(channelId)
       .success () ->
         toastr.success('Left channel', 'SUCCESS')
+        refreshChannels()
       .error (data) ->
         toastr.error(data, 'ERROR')
 
