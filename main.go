@@ -33,6 +33,8 @@ func main() {
 	m.Post("/api/v1/channels", domain.AuthenticationMiddleware, binding.Json(domain.Channel{}), binding.ErrorHandler, routes.CreateChannel)
 	m.Get("/api/v1/channels", domain.AuthenticationMiddleware, routes.ListChannels)
 	m.Get("/api/v1/channels/user", domain.AuthenticationMiddleware, routes.GetUserChannels)
+	m.Get("/api/v1/channels/join/:channelId", domain.AuthenticationMiddleware, routes.JoinChannel)
+	m.Get("/api/v1/channels/leave/:channelId", domain.AuthenticationMiddleware, routes.LeaveChannel)
 
 	// message routes
 	m.Get("/api/v1/messages/:channelId", domain.AuthenticationMiddleware, routes.MessagesByChannel)

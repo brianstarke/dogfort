@@ -27,9 +27,9 @@ div(ng-controller='ChannelsCtrl')
           td
             span(ng-if='c.members.indexOf(authedUser.uid) == -1')
               button.uk-button.uk-button-mini.uk-button-primary(ng-if='c.isPrivate') request membership
-              button.uk-button.uk-button-mini.uk-button-success(ng-if='!c.isPrivate') join
+              button.uk-button.uk-button-mini.uk-button-success(ng-if='!c.isPrivate', ng-click='join(c.uid)') join
             span(ng-if='c.members.indexOf(authedUser.uid) != -1')
-              button.uk-button.uk-button-mini.uk-button-danger unsubscribe
+              button.uk-button.uk-button-mini.uk-button-danger(ng-click='leave(c.uid)') leave
 
   #create.uk-modal
     .uk-modal-dialog

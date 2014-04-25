@@ -94,11 +94,71 @@ func (cd ChannelDomain) UserInChannel(userUid *UserUid, channelId string) (bool,
 	if err != nil {
 		return false, err
 	} else {
-		for _, u := range c.Members {
-			if u == *userUid {
-				return true, nil
-			}
-		}
-		return false, nil
+		return isMember(&c.Members, userUid) != -1, nil
 	}
+}
+
+/*
+Subscribes a user to a channel, unless it's private
+*/
+func (cd ChannelDomain) SubscribeToChannel(userUid *UserUid, channelId string) error {
+	c := Channel{}
+
+	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c)
+
+	if err != nil {
+		return err
+	}
+
+	if c.Private {
+		return fmt.Errorf("%s is a private channel, you need to request membership", c.Name)
+	}
+
+	if isMember(&c.Members, userUid) != -1 {
+		return fmt.Errorf("User [%s] is already subscribed", userUid)
+	}
+
+	c.Members = append(c.Members, *userUid)
+
+	err = cd.Collection.Update(bson.M{"uid": c.Uid}, &c)
+
+	return nil
+}
+
+/*
+Unsubscribes a user from a channel
+*/
+func (cd ChannelDomain) UnsubscribeFromChannel(userUid *UserUid, channelId string) error {
+	c := Channel{}
+
+	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c) // TODO i feel like I've written this before...
+
+	if err != nil {
+		return err
+	}
+
+	pos := isMember(&c.Members, userUid)
+
+	if pos != -1 {
+		c.Members = c.Members[:pos+copy(c.Members[pos:], c.Members[pos+1:])]
+
+		err = cd.Collection.Update(bson.M{"uid": c.Uid}, &c)
+
+		if err != nil {
+			return err
+		} else {
+			return nil
+		}
+	} else {
+		return fmt.Errorf("User [%s] is not subscribed to this channel", userUid)
+	}
+}
+
+func isMember(members *[]UserUid, user *UserUid) int {
+	for p, u := range *members {
+		if u == *user {
+			return p
+		}
+	}
+	return -1
 }

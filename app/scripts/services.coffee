@@ -52,6 +52,12 @@ app.factory 'Channel', ['$http', ($http) ->
 
     create: (newChannel) ->
       $http.post @baseUrl, newChannel
+
+    join: (channelId) ->
+      $http.get @baseUrl + '/join/' + channelId
+
+    leave: (channelId) ->
+      $http.get @baseUrl + '/leave/' + channelId
 ]
 
 app.factory 'authInterceptor',  ['$q', '$cookies', '$location', ($q, $cookies, $location) ->

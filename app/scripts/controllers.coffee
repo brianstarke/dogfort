@@ -15,8 +15,6 @@ app.controller 'ChatCtrl', ($scope, $location, $anchorScroll, Channel, Message, 
     Channel.userChannels()
       .success (data, status, headers, config) ->
         $scope.currentChannel = data.channels[0].uid
-        console.log $scope.currentChannel
-        console.log data.channels
 
         for channel in data.channels
           $scope.channels[channel.uid] = {}
@@ -68,6 +66,20 @@ app.controller 'ChannelsCtrl', ($scope, Channel, toastr) ->
 
   refreshChannels()
 
+  $scope.join = (channelId) ->
+    Channel.join(channelId)
+      .success () ->
+        toastr.success('Channel joined', 'SUCCESS')
+      .error (data) ->
+        toastr.error(data, 'ERROR')
+
+  $scope.leave = (channelId) ->
+    Channel.leave(channelId)
+      .success () ->
+        toastr.success('Left channel', 'SUCCESS')
+      .error (data) ->
+        toastr.error(data, 'ERROR')
+
   $scope.create = () ->
     Channel.create({
       name: $scope.newchannel.name
@@ -117,11 +129,18 @@ app.controller 'MainCtrl', ($rootScope, $scope, $cookies, $location, User) ->
         $rootScope.authedUser = data.user
         $rootScope.isAuthenticated = true
         $location.path '/chat'
+        connectToSocket()
       .error (data, status, headers, config) ->
         $rootScope.isAuthenticated = false
         $location.path '/login'
 
   $rootScope.setAuthedUser()
+
+  connectToSocket = () ->
+    if window["WebSocket"]
+      console.log 'browser supports WebSockets'
+    else
+      alert "Your browser doesn't support WebSockets, this app will suck for you."
 
   $scope.logout = () ->
     delete $cookies['dogfort_token']
