@@ -1,6 +1,4 @@
-app = angular.module 'dogfort.services', [
-  'ngCookies'
-]
+app = angular.module 'dogfort'
 
 app.factory 'User', ['$http', ($http) ->
   new class User

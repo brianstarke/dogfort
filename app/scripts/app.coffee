@@ -1,41 +1,37 @@
 app = angular.module 'dogfort', [
   'ngRoute'
-  'toastr'
-  'angularMoment'
-
-  'dogfort.controllers'
-  'dogfort.services'
-]
-
-app = angular.module 'dogfort.controllers', [
   'ngCookies'
 
-  'dogfort.services'
+  'toastr'
+  'angularMoment'
 ]
 
-app.config ['$routeProvider', '$httpProvider', ($routeProvider, $httpProvider) ->
-  $httpProvider.interceptors.push 'authInterceptor'
+app.config [
+  '$routeProvider'
+  '$httpProvider'
+  'toastrConfig'
 
-  $routeProvider.when '/login', {
-    templateUrl: '/partials/login.html'
-    controller: 'LoginCtrl'
-  }
+  ($routeProvider, $httpProvider, toastrConfig) ->
+    $httpProvider.interceptors.push 'authInterceptor'
 
-  $routeProvider.when '/channels', {
-    templateUrl: '/partials/channels.html'
-    controller: 'ChannelsCtrl'
-  }
+    $routeProvider.when '/login', {
+      templateUrl: '/partials/login.html'
+      controller: 'LoginCtrl'
+    }
 
-  $routeProvider.when '/chat', {
-    templateUrl: '/partials/chat.html'
-    controller: 'ChatCtrl'
-  }
+    $routeProvider.when '/channels', {
+      templateUrl: '/partials/channels.html'
+      controller: 'ChannelsCtrl'
+    }
 
-  $routeProvider.otherwise {
-    redirectTo: '/login'
-  }
-]
+    $routeProvider.when '/chat', {
+      templateUrl: '/partials/chat.html'
+      controller: 'ChatCtrl'
+    }
 
-app.config ['toastrConfig', (toastrConfig) ->
-  toastrConfig.positionClass = 'toast-bottom-full-width'
+    $routeProvider.otherwise {
+      redirectTo: '/login'
+    }
+
+    toastrConfig.positionClass = 'toast-bottom-full-width'
 ]

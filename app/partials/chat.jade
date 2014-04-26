@@ -5,8 +5,8 @@ div
         h3 your channels
 
         ul.uk-tab.uk-tab-left
-          li(ng-repeat="c in channels", ng-class="{ 'uk-active': isActive(c.channel.uid)}")
-            a(ng-click="changeChannel(c.channel.uid)") {{c.channel.name}}
+          li(ng-repeat="c in channels", ng-class="{ 'uk-active': isActive(c.uid)}")
+            a(ng-click="changeChannel(c.uid)") {{c.name}}
 
       .uk-width-4-5
         form.uk-form(ng-submit='sendMessage()')

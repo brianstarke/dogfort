@@ -21,14 +21,14 @@ div(ng-controller='ChannelsCtrl')
             span(ng-if='c.isPrivate')
               span.uk-badge.uk-badge-warning private
               | &nbsp;
-            span(ng-if='c.members.indexOf(authedUser.uid) != -1').uk-badge.uk-badge-primary subscribed
+            span(ng-if='c.members.indexOf(user.uid) != -1').uk-badge.uk-badge-primary subscribed
           td {{c.description}}
           td {{c.members.length}}
           td
-            span(ng-if='c.members.indexOf(authedUser.uid) == -1')
+            span(ng-if='c.members.indexOf(user.uid) == -1')
               button.uk-button.uk-button-mini.uk-button-primary(ng-if='c.isPrivate') request membership
               button.uk-button.uk-button-mini.uk-button-success(ng-if='!c.isPrivate', ng-click='join(c.uid)') join
-            span(ng-if='c.members.indexOf(authedUser.uid) != -1')
+            span(ng-if='c.members.indexOf(user.uid) != -1')
               button.uk-button.uk-button-mini.uk-button-danger(ng-click='leave(c.uid)') leave
 
   #create.uk-modal
