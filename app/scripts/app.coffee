@@ -7,6 +7,12 @@ app = angular.module 'dogfort', [
   'dogfort.services'
 ]
 
+app = angular.module 'dogfort.controllers', [
+  'ngCookies'
+
+  'dogfort.services'
+]
+
 app.config ['$routeProvider', '$httpProvider', ($routeProvider, $httpProvider) ->
   $httpProvider.interceptors.push 'authInterceptor'
 
