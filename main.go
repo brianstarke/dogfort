@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"runtime"
@@ -14,15 +15,23 @@ import (
 	"github.com/martini-contrib/render"
 )
 
-var apiRoot string = "/api/v1"
+var (
+	appPath        = flag.String("appPath", "public", "path to dogfort app")
+	apiRoot string = "/api/v1"
+)
 
 func main() {
+	flag.Parse()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// start hub
 	go hub.H.Run()
 
 	m := martini.Classic()
+
+	// serve app html/js as well
+	log.Printf("Serving dogfort app from [%s]", *appPath)
+	m.Use(martini.Static(*appPath))
 
 	// JSON rendering
 	m.Use(render.Renderer(render.Options{IndentJSON: true}))
