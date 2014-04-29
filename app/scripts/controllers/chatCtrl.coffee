@@ -2,7 +2,7 @@ app = angular.module 'dogfort'
 
 class ChatCtrl extends BaseCtrl
   @register app
-  @inject '$scope', '$location', 'Channel', 'Message', 'User', 'toastr'
+  @inject '$scope', '$location', 'Channel', 'Message', 'User', 'toastr', 'Penis'
 
   initialize: ->
     @$scope.channels          = {}

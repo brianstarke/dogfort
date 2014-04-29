@@ -14,37 +14,59 @@ import (
 	"github.com/martini-contrib/render"
 )
 
+var apiRoot string = "/api/v1"
+
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// start hub
 	go hub.H.Run()
 
-	// map routes
 	m := martini.Classic()
 
-	// JSON rendering middleware
+	// JSON rendering
 	m.Use(render.Renderer(render.Options{IndentJSON: true}))
 
-	// puts references all the initialized domain objects in the middleware layer
+	// references to all the initialized domain objects
 	m.Use(domain.DomainMiddleware())
 
-	// user routes
-	m.Post("/api/v1/users", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.CreateUser)
-	m.Post("/api/v1/authenticate", binding.Json(domain.AuthenticationRequest{}), binding.ErrorHandler, routes.AuthenticateUser)
-	m.Get("/api/v1/user", domain.AuthenticationMiddleware, routes.GetAuthenticatedUser) // who am I?!
-	m.Get("/api/v1/users/:userId", domain.AuthenticationMiddleware, routes.GetUserById)
+	/*
+	  Authentication
 
-	// channel routes
-	m.Post("/api/v1/channels", domain.AuthenticationMiddleware, binding.Json(domain.Channel{}), binding.ErrorHandler, routes.CreateChannel)
-	m.Get("/api/v1/channels", domain.AuthenticationMiddleware, routes.ListChannels)
-	m.Get("/api/v1/channels/user", domain.AuthenticationMiddleware, routes.GetUserChannels)
-	m.Get("/api/v1/channels/join/:channelId", domain.AuthenticationMiddleware, routes.JoinChannel)
-	m.Get("/api/v1/channels/leave/:channelId", domain.AuthenticationMiddleware, routes.LeaveChannel)
+	  POST returns a JWT token
+	  GET (with JWT in the Authorization header) returns the authenticated user
+	*/
+	m.Group(apiRoot+"/auth", func(r martini.Router) {
+		r.Post("", binding.Json(domain.AuthenticationRequest{}), binding.ErrorHandler, routes.UserAuthenticate)
+		r.Get("", domain.AuthenticationMiddleware, routes.UserByToken)
+	})
 
-	// message routes
-	m.Get("/api/v1/messages/:channelId", domain.AuthenticationMiddleware, routes.MessagesByChannel)
-	m.Post("/api/v1/messages", domain.AuthenticationMiddleware, binding.Json(domain.Message{}), binding.ErrorHandler, routes.CreateMessage)
+	/*
+	   Users
+	*/
+	m.Group(apiRoot+"/users", func(r martini.Router) {
+		m.Post("", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.UserCreate)
+		m.Get("/:id", domain.AuthenticationMiddleware, routes.UserById)
+	})
+
+	/*
+	   Channels
+	*/
+	m.Group(apiRoot+"/channels", func(r martini.Router) {
+		m.Post("", binding.Json(domain.Channel{}), binding.ErrorHandler, routes.ChannelCreate)
+		m.Get("", routes.ChannelList)
+		m.Get("/user/:id", routes.ChannelsByUser)
+		m.Get("/join/:id", routes.ChannelJoin)
+		m.Get("/leave/:id", routes.ChannelLeave)
+	}, domain.AuthenticationMiddleware)
+
+	/*
+	  Messages
+	*/
+	m.Group(apiRoot+"/messages", func(r martini.Router) {
+		m.Post("", binding.Json(domain.Message{}), binding.ErrorHandler, routes.CreateMessage)
+		m.Get("/channel/:id", routes.MessagesByChannel)
+	}, domain.AuthenticationMiddleware)
 
 	// socket connector
 	m.Get("/ws/connect", hub.WsHandler)

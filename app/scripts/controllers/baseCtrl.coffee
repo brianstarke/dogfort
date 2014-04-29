@@ -1,7 +1,3 @@
-###
-  Extend this class to make controllers more coffee-like and less
-  terrible
-###
 class @BaseCtrl
 
   @register: (app, name) ->

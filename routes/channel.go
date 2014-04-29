@@ -8,7 +8,7 @@ import (
 	"github.com/martini-contrib/render"
 )
 
-func CreateChannel(channelDomain *domain.ChannelDomain, userUid domain.UserUid, channel domain.Channel, req *http.Request, r render.Render) {
+func ChannelCreate(channelDomain *domain.ChannelDomain, userUid domain.UserUid, channel domain.Channel, req *http.Request, r render.Render) {
 	id, err := channelDomain.CreateChannel(&channel, &userUid)
 
 	if err != nil {
@@ -20,7 +20,7 @@ func CreateChannel(channelDomain *domain.ChannelDomain, userUid domain.UserUid, 
 	return
 }
 
-func ListChannels(channelDomain *domain.ChannelDomain, r render.Render) {
+func ChannelList(channelDomain *domain.ChannelDomain, r render.Render) {
 	c, err := channelDomain.ListChannels()
 
 	if err != nil {
@@ -30,7 +30,7 @@ func ListChannels(channelDomain *domain.ChannelDomain, r render.Render) {
 	}
 }
 
-func GetUserChannels(channelDomain *domain.ChannelDomain, userUid domain.UserUid, req *http.Request, r render.Render) {
+func ChannelsByUser(channelDomain *domain.ChannelDomain, userUid domain.UserUid, req *http.Request, r render.Render) {
 	c, err := channelDomain.GetUserChannels(&userUid)
 
 	if err != nil {
@@ -42,8 +42,8 @@ func GetUserChannels(channelDomain *domain.ChannelDomain, userUid domain.UserUid
 	return
 }
 
-func JoinChannel(cd *domain.ChannelDomain, userUid domain.UserUid, params martini.Params, r render.Render) {
-	err := cd.SubscribeToChannel(&userUid, params["channelId"])
+func ChannelJoin(cd *domain.ChannelDomain, userUid domain.UserUid, params martini.Params, r render.Render) {
+	err := cd.SubscribeToChannel(&userUid, params["id"])
 
 	if err != nil {
 		r.JSON(400, err.Error())
@@ -52,8 +52,8 @@ func JoinChannel(cd *domain.ChannelDomain, userUid domain.UserUid, params martin
 	}
 }
 
-func LeaveChannel(cd *domain.ChannelDomain, userUid domain.UserUid, params martini.Params, r render.Render) {
-	err := cd.UnsubscribeFromChannel(&userUid, params["channelId"])
+func ChannelLeave(cd *domain.ChannelDomain, userUid domain.UserUid, params martini.Params, r render.Render) {
+	err := cd.UnsubscribeFromChannel(&userUid, params["id"])
 
 	if err != nil {
 		r.JSON(400, err.Error())
