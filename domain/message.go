@@ -9,11 +9,11 @@ import (
 )
 
 type Message struct {
-	Uid       string  `json:"uid"`
-	ChannelId string  `json:"channelId",binding:"required"`
-	UserId    UserUid `json:"userId"`
-	Text      string  `json:"text",binding:"required"`
-	Timestamp int64   `json:"timestamp"` // Unix time, in seconds
+	Uid       string    `json:"uid"`
+	ChannelId string    `json:"channelId",binding:"required"`
+	UserId    UserUid   `json:"userId"`
+	Text      string    `json:"text",binding:"required"`
+	Timestamp time.Time `json:"timestamp"` // Unix time, in seconds
 }
 
 type MessageDomain struct {
@@ -33,7 +33,7 @@ func (md MessageDomain) CreateMessage(message *Message) (*string, error) {
 	}
 
 	message.Uid = uid.String()
-	message.Timestamp = time.Now().Unix()
+	message.Timestamp = time.Now()
 
 	err = md.Collection.Insert(&message)
 

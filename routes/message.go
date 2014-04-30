@@ -18,14 +18,14 @@ func CreateMessage(messageDomain *domain.MessageDomain, message domain.Message, 
 }
 
 func MessagesByChannel(md *domain.MessageDomain, cd *domain.ChannelDomain, userUid domain.UserUid, params martini.Params, r render.Render) {
-	ok, err := cd.UserInChannel(&userUid, params["channelId"])
+	ok, err := cd.UserInChannel(&userUid, params["id"])
 
 	if err != nil {
 		r.JSON(400, err.Error())
 	}
 
 	if ok {
-		messages, err := md.MessagesByChannel(&userUid, params["channelId"])
+		messages, err := md.MessagesByChannel(&userUid, params["id"])
 
 		if err != nil {
 			r.JSON(400, err.Error())
