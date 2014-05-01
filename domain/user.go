@@ -108,7 +108,7 @@ func (ud userDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
 
 	token.Header["user_id"] = u.Uid
 	token.Claims["iat"] = time.Now().Unix()
-	token.Claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	token.Claims["exp"] = time.Now().Add(time.Hour * 24 * 30 * 6).Unix()
 
 	// TODO!  move this signing key to .env (and maybe use rsa key)
 	tokenString, err := token.SignedString([]byte("dogfort"))
