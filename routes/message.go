@@ -10,11 +10,13 @@ import (
 func CreateMessage(message domain.Message, userUid domain.UserUid, r render.Render) {
 	message.UserId = userUid
 	id, err := domain.MessageDomain.CreateMessage(&message)
-	hub.H.MessagePublish(message.ChannelId, &message.Text)
 
 	if err != nil {
 		r.JSON(400, err.Error())
 	} else {
+		m, _ := domain.MessageDomain.MessageById(*id)
+		hub.H.MessagePublish(message.ChannelId, m)
+
 		r.JSON(200, map[string]interface{}{"message": id})
 	}
 }

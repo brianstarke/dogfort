@@ -48,7 +48,7 @@ func (h *Hub) Publish(topic string, message *string) {
 	}
 }
 
-func (h *Hub) MessagePublish(channelId string, message *string) {
+func (h *Hub) MessagePublish(channelId string, message interface{}) {
 	for k, v := range h.Connections {
 		sendIt, err := domain.ChannelDomain.UserInChannel(&k, channelId)
 

@@ -60,3 +60,15 @@ func (md messageDomain) MessagesByChannel(userUid *UserUid, channelId string) (*
 		return &m, nil
 	}
 }
+
+func (md messageDomain) MessageById(id string) (*Message, error) {
+	m := Message{}
+
+	err := md.Collection.Find(bson.M{"uid": id}).One(&m)
+
+	if err != nil {
+		return nil, err
+	} else {
+		return &m, nil
+	}
+}
