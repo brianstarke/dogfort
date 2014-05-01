@@ -36,9 +36,6 @@ func main() {
 	// JSON rendering
 	m.Use(render.Renderer(render.Options{IndentJSON: true}))
 
-	// references to all the initialized domain objects
-	m.Use(domain.DomainMiddleware())
-
 	/*
 	  Authentication
 
@@ -78,7 +75,7 @@ func main() {
 	}, domain.AuthenticationMiddleware)
 
 	// socket connector
-	m.Get("/ws/connect", hub.WsHandler)
+	m.Get("/ws/connect", domain.AuthenticationMiddleware, hub.WsHandler)
 
 	// start server
 	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))

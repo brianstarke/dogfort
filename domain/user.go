@@ -36,14 +36,14 @@ type AuthenticationRequest struct {
 	Password string `binding:"required"`
 }
 
-type UserDomain struct {
+type userDomain struct {
 	Collection *mgo.Collection
 }
 
 /*
 Creates a User from a NewUser struct.  Returns the new user's UID
 */
-func (ud UserDomain) CreateUser(newUser *NewUser) (*UserUid, error) {
+func (ud userDomain) CreateUser(newUser *NewUser) (*UserUid, error) {
 	// check to see if this user already exists
 	n, err := ud.Collection.Find(bson.M{"$or": []bson.M{bson.M{"email": newUser.Email}, bson.M{"username": newUser.Username}}}).Count()
 
@@ -88,7 +88,7 @@ func (ud UserDomain) CreateUser(newUser *NewUser) (*UserUid, error) {
 /*
 Attempts to authenticate a user and returns a JWT if successful
 */
-func (ud UserDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
+func (ud userDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
 	u := User{}
 
 	err := ud.Collection.Find(bson.M{"username": ar.Username}).One(&u)
@@ -120,7 +120,7 @@ func (ud UserDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
 	}
 }
 
-func (ud UserDomain) UserByUid(uid UserUid) (*User, error) {
+func (ud userDomain) UserByUid(uid UserUid) (*User, error) {
 	u := User{}
 	err := ud.Collection.Find(bson.M{"uid": uid}).One(&u)
 

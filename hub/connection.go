@@ -1,14 +1,16 @@
 package hub
 
 import (
+	"log"
 	"net/http"
 
+	"github.com/brianstarke/dogfort/domain"
 	"github.com/gorilla/websocket"
 )
 
 type Connection struct {
 	ws   *websocket.Conn
-	send chan []byte
+	send chan map[string]interface{}
 }
 
 func (c *Connection) Reader() {
@@ -17,14 +19,14 @@ func (c *Connection) Reader() {
 		if err != nil {
 			break
 		}
-		H.Broadcast <- message
+		log.Print(message)
 	}
 	c.ws.Close()
 }
 
 func (c *Connection) Writer() {
 	for message := range c.send {
-		err := c.ws.WriteMessage(websocket.TextMessage, message)
+		err := c.ws.WriteJSON(message)
 		if err != nil {
 			break
 		}
@@ -32,7 +34,7 @@ func (c *Connection) Writer() {
 	c.ws.Close()
 }
 
-func WsHandler(w http.ResponseWriter, r *http.Request) {
+func WsHandler(w http.ResponseWriter, u domain.UserUid, r *http.Request) {
 	ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
 	if _, ok := err.(websocket.HandshakeError); ok {
 		http.Error(w, "Not a websocket handshake", 400)
@@ -40,9 +42,12 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	} else if err != nil {
 		return
 	}
-	c := &Connection{send: make(chan []byte, 256), ws: ws}
-	H.Register <- c
-	defer func() { H.Unregister <- c }()
+	c := &Connection{send: make(chan map[string]interface{}), ws: ws}
+	H.Register <- struct {
+		domain.UserUid
+		*Connection
+	}{u, c}
+	defer func() { H.Unregister <- u }()
 	go c.Writer()
 	c.Reader()
 }

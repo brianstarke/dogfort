@@ -8,8 +8,8 @@ import (
 	"github.com/martini-contrib/render"
 )
 
-func UserCreate(userDomain *domain.UserDomain, newUser domain.NewUser, req *http.Request, r render.Render) {
-	id, err := userDomain.CreateUser(&newUser)
+func UserCreate(newUser domain.NewUser, req *http.Request, r render.Render) {
+	id, err := domain.UserDomain.CreateUser(&newUser)
 
 	if err != nil {
 		r.JSON(400, err.Error())
@@ -20,8 +20,8 @@ func UserCreate(userDomain *domain.UserDomain, newUser domain.NewUser, req *http
 	return
 }
 
-func UserById(userDomain *domain.UserDomain, params martini.Params, r render.Render) {
-	u, err := userDomain.UserByUid(domain.UserUid(params["id"]))
+func UserById(params martini.Params, r render.Render) {
+	u, err := domain.UserDomain.UserByUid(domain.UserUid(params["id"]))
 
 	if err != nil {
 		r.JSON(400, err.Error())

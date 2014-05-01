@@ -10,8 +10,8 @@ import (
 /*
   Attempts to authenticate a user, on success issues a JWT
 */
-func UserAuthenticate(userDomain *domain.UserDomain, ar domain.AuthenticationRequest, req *http.Request, r render.Render) {
-	jwt, err := userDomain.Authenticate(&ar)
+func UserAuthenticate(ar domain.AuthenticationRequest, req *http.Request, r render.Render) {
+	jwt, err := domain.UserDomain.Authenticate(&ar)
 
 	if err != nil {
 		r.JSON(400, err.Error())
@@ -23,8 +23,8 @@ func UserAuthenticate(userDomain *domain.UserDomain, ar domain.AuthenticationReq
 /*
   Uses the JWT in the Authorization header to look up and return the authenticated user
 */
-func UserByToken(userDomain *domain.UserDomain, userUid domain.UserUid, r render.Render) {
-	u, err := userDomain.UserByUid(userUid)
+func UserByToken(userUid domain.UserUid, r render.Render) {
+	u, err := domain.UserDomain.UserByUid(userUid)
 
 	if err != nil {
 		r.JSON(400, err.Error())

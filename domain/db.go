@@ -11,29 +11,11 @@ import (
 )
 
 var (
-	usersCollection    = "users"
-	channelsCollection = "channels"
-	messagesCollection = "messages"
+	db            = intializeMongo()
+	UserDomain    = &userDomain{db.C("users")}
+	ChannelDomain = &channelDomain{db.C("channels")}
+	MessageDomain = &messageDomain{db.C("messages")}
 )
-
-/*
-Make all domain structs available as martini middleware
-*/
-func DomainMiddleware() martini.Handler {
-	db := intializeMongo()
-
-	userDomain := &UserDomain{db.C(usersCollection)}
-	channelDomain := &ChannelDomain{db.C(channelsCollection)}
-	messageDomain := &MessageDomain{db.C(messagesCollection)}
-
-	return func(context martini.Context) {
-		context.Map(userDomain)
-		context.Map(channelDomain)
-		context.Map(messageDomain)
-
-		context.Next()
-	}
-}
 
 /*
 Check Authorization token
@@ -42,7 +24,14 @@ func AuthenticationMiddleware(req *http.Request, context martini.Context, r rend
 	token := req.Header.Get("Authorization")
 
 	if token == "" {
-		r.Error(401)
+		// failover to using cookie (mostly for socket auth TODO unfuck that)
+		t, err := req.Cookie("dogfort_token")
+
+		if err != nil {
+			r.Error(401)
+		} else {
+			token = t.Value
+		}
 	}
 
 	uid, err := getUserUidFromToken(token)

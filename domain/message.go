@@ -16,14 +16,14 @@ type Message struct {
 	Timestamp time.Time `json:"timestamp"` // Unix time, in seconds
 }
 
-type MessageDomain struct {
+type messageDomain struct {
 	Collection *mgo.Collection
 }
 
 /*
 Creates a new message, returns the message ID
 */
-func (md MessageDomain) CreateMessage(message *Message) (*string, error) {
+func (md messageDomain) CreateMessage(message *Message) (*string, error) {
 	// TODO validate channel ID and user ID
 
 	uid, err := uuid.NewV4()
@@ -49,7 +49,7 @@ Gets all messages for a channel
 
 TODO add filtering, pagination
 */
-func (md MessageDomain) MessagesByChannel(userUid *UserUid, channelId string) (*[]Message, error) {
+func (md messageDomain) MessagesByChannel(userUid *UserUid, channelId string) (*[]Message, error) {
 	m := []Message{}
 
 	err := md.Collection.Find(bson.M{"channelid": channelId}).All(&m)

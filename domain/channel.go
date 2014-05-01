@@ -17,14 +17,14 @@ type Channel struct {
 	Members     []UserUid `json:"members"`
 }
 
-type ChannelDomain struct {
+type channelDomain struct {
 	Collection *mgo.Collection
 }
 
 /*
 Creates a new channel, returns the Channel ID
 */
-func (cd ChannelDomain) CreateChannel(channel *Channel, userUid *UserUid) (*string, error) {
+func (cd channelDomain) CreateChannel(channel *Channel, userUid *UserUid) (*string, error) {
 	// check to see if there is already a channel with this name
 	n, err := cd.Collection.Find(bson.M{"name": channel.Name}).Count()
 
@@ -56,7 +56,7 @@ func (cd ChannelDomain) CreateChannel(channel *Channel, userUid *UserUid) (*stri
 	}
 }
 
-func (cd ChannelDomain) ListChannels() (*[]Channel, error) {
+func (cd channelDomain) ListChannels() (*[]Channel, error) {
 	c := []Channel{}
 
 	err := cd.Collection.Find(bson.M{}).All(&c)
@@ -71,7 +71,7 @@ func (cd ChannelDomain) ListChannels() (*[]Channel, error) {
 /*
 Returns all channels this user is in
 */
-func (cd ChannelDomain) GetUserChannels(userUid *UserUid) (*[]Channel, error) {
+func (cd channelDomain) GetUserChannels(userUid *UserUid) (*[]Channel, error) {
 	c := []Channel{}
 
 	err := cd.Collection.Find(bson.M{"members": *userUid}).All(&c)
@@ -86,7 +86,7 @@ func (cd ChannelDomain) GetUserChannels(userUid *UserUid) (*[]Channel, error) {
 /*
 Checks if the user is in this channel
 */
-func (cd ChannelDomain) UserInChannel(userUid *UserUid, channelId string) (bool, error) {
+func (cd channelDomain) UserInChannel(userUid *UserUid, channelId string) (bool, error) {
 	c := Channel{}
 
 	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c)
@@ -101,7 +101,7 @@ func (cd ChannelDomain) UserInChannel(userUid *UserUid, channelId string) (bool,
 /*
 Subscribes a user to a channel, unless it's private
 */
-func (cd ChannelDomain) SubscribeToChannel(userUid *UserUid, channelId string) error {
+func (cd channelDomain) SubscribeToChannel(userUid *UserUid, channelId string) error {
 	c := Channel{}
 
 	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c)
@@ -128,7 +128,7 @@ func (cd ChannelDomain) SubscribeToChannel(userUid *UserUid, channelId string) e
 /*
 Unsubscribes a user from a channel
 */
-func (cd ChannelDomain) UnsubscribeFromChannel(userUid *UserUid, channelId string) error {
+func (cd channelDomain) UnsubscribeFromChannel(userUid *UserUid, channelId string) error {
 	c := Channel{}
 
 	err := cd.Collection.Find(bson.M{"uid": channelId}).One(&c) // TODO i feel like I've written this before...
