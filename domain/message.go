@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"regexp"
 	"time"
 
 	"github.com/nu7hatch/gouuid"
@@ -9,11 +10,13 @@ import (
 )
 
 type Message struct {
-	Uid       string    `json:"uid"`
-	ChannelId string    `json:"channelId",binding:"required"`
-	UserId    UserUid   `json:"userId"`
-	Text      string    `json:"text",binding:"required"`
-	Timestamp time.Time `json:"timestamp"` // Unix time, in seconds
+	Uid        string    `json:"uid"`
+	ChannelId  string    `json:"channelId",binding:"required"`
+	UserId     UserUid   `json:"userId"`
+	Text       string    `json:"text",binding:"required"`
+	HasImage   bool      `json:"hasImage",omitempty`
+	Attachment string    `json:"attachment",omitempty`
+	Timestamp  time.Time `json:"timestamp"` // Unix time, in seconds
 }
 
 type messageDomain struct {
@@ -34,6 +37,9 @@ func (md messageDomain) CreateMessage(message *Message) (*string, error) {
 
 	message.Uid = uid.String()
 	message.Timestamp = time.Now()
+
+	// eat error, we don't care yet
+	md.addAttachments(message)
 
 	err = md.Collection.Insert(&message)
 
@@ -71,4 +77,23 @@ func (md messageDomain) MessageById(id string) (*Message, error) {
 	} else {
 		return &m, nil
 	}
+}
+
+func (md messageDomain) addAttachments(message *Message) error {
+	re, err := regexp.Compile("https?://[^\\s<>\"]+|www\\.[^\\s<>\"]+")
+
+	if err != nil {
+		return err
+	}
+
+	b := re.Find([]byte(message.Text))
+
+	if len(b) > 0 {
+		message.HasImage = true
+		message.Attachment = string(b)
+	} else {
+		message.HasImage = false
+	}
+
+	return nil
 }
