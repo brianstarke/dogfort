@@ -74,6 +74,11 @@ func main() {
 		m.Get("/channel/:id", routes.MessagesByChannel)
 	}, domain.AuthenticationMiddleware)
 
+	/*
+	   Receive github notifications for dogfort updates channel
+	*/
+	m.Post(apiRoot+"/github/:channelId", routes.GithubHandler)
+
 	// socket connector
 	m.Get("/ws/connect", domain.AuthenticationMiddleware, hub.WsHandler)
 
