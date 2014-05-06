@@ -30,7 +30,10 @@ func (c *Connection) Writer() {
 		if err != nil {
 			log.Printf("Error publishing message: %s", err.Error())
 			break
+		} else {
+			log.Printf("Published message: ", c.message)
 		}
+
 	}
 	c.ws.Close()
 }
