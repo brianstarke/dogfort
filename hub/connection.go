@@ -28,6 +28,7 @@ func (c *Connection) Writer() {
 	for message := range c.send {
 		err := c.ws.WriteJSON(message)
 		if err != nil {
+			log.Printf("Error publishing message: %s", err.Error())
 			break
 		}
 	}

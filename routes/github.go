@@ -42,7 +42,6 @@ type GithubRepository struct {
 }
 
 func GithubHandler(msg GithubMsg, params martini.Params, r render.Render) {
-
 	m := domain.Message{}
 
 	m.ChannelId = params["channelId"]
