@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"log"
+
 	"github.com/brianstarke/dogfort/domain"
 	"github.com/brianstarke/dogfort/hub"
 	"github.com/go-martini/martini"
@@ -15,12 +17,22 @@ func CreateMessage(message domain.Message, userUid domain.UserUid, r render.Rend
 	message.IsAdminMsg = false
 
 	if err != nil {
+		log.Printf("Error creating message: %s", err.Error())
+
 		r.JSON(400, err.Error())
+		return
 	} else {
-		m, _ := domain.MessageDomain.MessageById(*id)
+		m, err := domain.MessageDomain.MessageById(*id)
+
+		if err != nil {
+			log.Printf("Error getting message for publish: %s", err.Error())
+			return
+		}
+
 		hub.H.MessagePublish(message.ChannelId, m)
 
 		r.JSON(200, map[string]interface{}{"message": id})
+		return
 	}
 }
 

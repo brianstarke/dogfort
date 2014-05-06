@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"log"
+
 	"github.com/nu7hatch/gouuid"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -106,7 +108,12 @@ func (md messageDomain) addAttachments(message *Message) error {
 Only valid type right now is "IMAGE" or "UNKNOWN"
 **/
 func (md messageDomain) getType(url string) string {
-	resp, _ := http.Head(url)
+	resp, err := http.Head(url)
+
+	if err != nil {
+		log.Printf("Error while getting resource type : %s", err.Error())
+		return "UNKNOWN"
+	}
 
 	header := resp.Header["Content-Type"]
 

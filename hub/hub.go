@@ -53,7 +53,7 @@ func (h *Hub) MessagePublish(channelId string, message interface{}) {
 		sendIt, err := domain.ChannelDomain.UserInChannel(&k, channelId)
 
 		if err != nil {
-			log.Println(err) // TODO handle this
+			log.Printf("Error publishing message: %s", err.Error())
 		}
 
 		if sendIt {
