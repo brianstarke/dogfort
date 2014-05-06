@@ -77,7 +77,7 @@ func main() {
 	/*
 	   Receive github notifications for dogfort updates channel
 	*/
-	m.Post(apiRoot+"/github/:channelId", routes.GithubHandler)
+	m.Post(apiRoot+"/github/:channelId", binding.Json(routes.GithubMsg{}), binding.ErrorHandler, routes.GithubHandler)
 
 	// socket connector
 	m.Get("/ws/connect", domain.AuthenticationMiddleware, hub.WsHandler)

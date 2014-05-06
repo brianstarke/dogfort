@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/brianstarke/dogfort/domain"
@@ -61,10 +60,4 @@ func ChannelLeave(userUid domain.UserUid, params martini.Params, r render.Render
 	} else {
 		r.JSON(200, "ok")
 	}
-}
-
-func GithubHandler(req *http.Request, r render.Render) {
-	log.Print(req.Body)
-
-	r.JSON(200, "ok")
 }

@@ -89,9 +89,7 @@ func (ud userDomain) CreateUser(newUser *NewUser) (*UserUid, error) {
 Attempts to authenticate a user and returns a JWT if successful
 */
 func (ud userDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
-	u := User{}
-
-	err := ud.Collection.Find(bson.M{"username": ar.Username}).One(&u)
+	u, err := ud.UserByUsername(ar.Username)
 
 	if err != nil {
 		return nil, err
@@ -117,6 +115,18 @@ func (ud userDomain) Authenticate(ar *AuthenticationRequest) (*string, error) {
 		return nil, err
 	} else {
 		return &tokenString, nil
+	}
+}
+
+func (ud userDomain) UserByUsername(username string) (*User, error) {
+	u := User{}
+
+	err := ud.Collection.Find(bson.M{"username": username}).One(&u)
+
+	if err != nil {
+		return nil, err
+	} else {
+		return &u, nil
 	}
 }
 
