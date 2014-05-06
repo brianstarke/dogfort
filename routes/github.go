@@ -1,9 +1,20 @@
 package routes
 
 import (
+	"bytes"
+	"text/template"
+
 	"github.com/brianstarke/dogfort/domain"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
+)
+
+var (
+	tmplStr = `<strong>GitHub</strong> new commits to <a href='{{.Repository.Url}}' target='_blank'>{{.Repository.Name}}</a>&nbsp;
+  <small>(<a href='{{.CompareUrl}} target='_blank'>compare</a>)</small><br>
+{{range .Commits}}<small>- <em>{{.Committer.Username}}</em> :: {{.Message}}</small><br>{{end}}
+`
+	commitTmpl, _ = template.New("commitTemplate").Parse(tmplStr)
 )
 
 type GithubMsg struct {
@@ -38,7 +49,10 @@ func GithubHandler(msg GithubMsg, params martini.Params, r render.Render) {
 	m.IsAdminMsg = true
 	m.IsHtml = true
 
-	m.Text = "new commit to <strong>" + msg.Repository.Name + "</strong> from " + msg.Commits[0].Committer.Name + ": " + msg.Commits[0].Message
+	var b bytes.Buffer
+
+	_ = commitTmpl.Execute(&b, msg)
+	m.Text = b.String()
 
 	domain.MessageDomain.CreateMessage(&m)
 
