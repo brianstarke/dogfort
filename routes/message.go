@@ -11,6 +11,9 @@ func CreateMessage(message domain.Message, userUid domain.UserUid, r render.Rend
 	message.UserId = userUid
 	id, err := domain.MessageDomain.CreateMessage(&message)
 
+	message.IsHtml = false
+	message.IsAdminMsg = false
+
 	if err != nil {
 		r.JSON(400, err.Error())
 	} else {

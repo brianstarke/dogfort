@@ -1,7 +1,9 @@
 package domain
 
 import (
+	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/nu7hatch/gouuid"
@@ -17,6 +19,8 @@ type Message struct {
 	HasImage   bool      `json:"hasImage",omitempty`
 	Attachment string    `json:"attachment",omitempty`
 	Timestamp  time.Time `json:"timestamp"` // Unix time, in seconds
+	IsAdminMsg bool      `json:"isAdminMsg",omitempty`
+	IsHtml     bool      `json:"isHtml",omitempty`
 }
 
 type messageDomain struct {
@@ -88,7 +92,7 @@ func (md messageDomain) addAttachments(message *Message) error {
 
 	b := re.Find([]byte(message.Text))
 
-	if len(b) > 0 {
+	if len(b) > 0 && md.getType(string(b)) == "IMAGE" {
 		message.HasImage = true
 		message.Attachment = string(b)
 	} else {
@@ -96,4 +100,19 @@ func (md messageDomain) addAttachments(message *Message) error {
 	}
 
 	return nil
+}
+
+/**
+Only valid type right now is "IMAGE" or "UNKNOWN"
+**/
+func (md messageDomain) getType(url string) string {
+	resp, _ := http.Head(url)
+
+	header := resp.Header["Content-Type"]
+
+	if strings.Index(header[0], "image") != -1 {
+		return "IMAGE"
+	} else {
+		return "UNKNOWN"
+	}
 }
