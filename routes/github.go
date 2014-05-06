@@ -5,6 +5,7 @@ import (
 	"text/template"
 
 	"github.com/brianstarke/dogfort/domain"
+	"github.com/brianstarke/dogfort/hub"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 )
@@ -54,7 +55,8 @@ func GithubHandler(msg GithubMsg, params martini.Params, r render.Render) {
 	_ = commitTmpl.Execute(&b, msg)
 	m.Text = b.String()
 
-	domain.MessageDomain.CreateMessage(&m)
+	mId, _ := domain.MessageDomain.CreateMessage(&m)
+	hub.H.MessagePublish(m.ChannelId, mId)
 
 	r.JSON(200, "ok")
 }
