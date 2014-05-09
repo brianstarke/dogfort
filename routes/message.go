@@ -43,8 +43,12 @@ func MessagesByChannel(userUid domain.UserUid, params martini.Params, r render.R
 		r.JSON(400, err.Error())
 	}
 
+	if err != nil {
+		r.JSON(400, err.Error())
+	}
+
 	if ok {
-		messages, err := domain.MessageDomain.MessagesByChannel(&userUid, params["id"])
+		messages, err := domain.MessageDomain.MessagesByChannel(&userUid, params["id"], params["before"], params["num"])
 
 		if err != nil {
 			r.JSON(400, err.Error())

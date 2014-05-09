@@ -3,6 +3,7 @@ package domain
 import (
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -61,10 +62,18 @@ Gets all messages for a channel
 
 TODO add filtering, pagination
 */
-func (md messageDomain) MessagesByChannel(userUid *UserUid, channelId string) (*[]Message, error) {
+func (md messageDomain) MessagesByChannel(userUid *UserUid, channelId string, beforeTs string, numMessages string) (*[]Message, error) {
 	m := []Message{}
 
-	err := md.Collection.Find(bson.M{"channelid": channelId}).All(&m)
+	limit, err := strconv.ParseInt(numMessages, 10, 0)
+	res, err := strconv.ParseInt(beforeTs, 10, 64)
+	ts := time.Unix(res/1000, 0)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = md.Collection.Find(bson.M{"channelid": channelId, "timestamp": bson.M{"$lte": ts}}).Limit(int(limit)).Sort("-timestamp").All(&m)
 
 	if err != nil {
 		return nil, err

@@ -71,7 +71,7 @@ func main() {
 	*/
 	m.Group(apiRoot+"/messages", func(r martini.Router) {
 		m.Post("", binding.Json(domain.Message{}), binding.ErrorHandler, routes.CreateMessage)
-		m.Get("/channel/:id", routes.MessagesByChannel)
+		m.Get("/channel/:id/before/:before/num/:num", routes.MessagesByChannel)
 	}, domain.AuthenticationMiddleware)
 
 	/*
