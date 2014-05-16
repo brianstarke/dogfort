@@ -59,8 +59,6 @@ func (md messageDomain) CreateMessage(message *Message) (*string, error) {
 
 /*
 Gets all messages for a channel
-
-TODO add filtering, pagination
 */
 func (md messageDomain) MessagesByChannel(userUid *UserUid, channelId string, beforeTs string, numMessages string) (*[]Message, error) {
 	m := []Message{}

@@ -29,7 +29,7 @@ func CreateMessage(message domain.Message, userUid domain.UserUid, r render.Rend
 			return
 		}
 
-		hub.H.MessagePublish(message.ChannelId, m)
+		hub.H.MessagePublish(m)
 
 		r.JSON(200, map[string]interface{}{"message": id})
 		return

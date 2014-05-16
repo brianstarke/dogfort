@@ -2,6 +2,7 @@ package routes
 
 import (
 	"bytes"
+	"log"
 	"text/template"
 
 	"github.com/brianstarke/dogfort/domain"
@@ -54,8 +55,25 @@ func GithubHandler(msg GithubMsg, params martini.Params, r render.Render) {
 	_ = commitTmpl.Execute(&b, msg)
 	m.Text = b.String()
 
-	mId, _ := domain.MessageDomain.CreateMessage(&m)
-	hub.H.MessagePublish(m.ChannelId, mId)
+	id, err := domain.MessageDomain.CreateMessage(&m)
 
-	r.JSON(200, "ok")
+	if err != nil {
+		log.Printf("Error creating message: %s", err.Error())
+
+		r.JSON(400, err.Error())
+		return
+	} else {
+		m, err := domain.MessageDomain.MessageById(*id)
+
+		if err != nil {
+			log.Printf("Error getting message for publish: %s", err.Error())
+			return
+		}
+
+		hub.H.MessagePublish(m)
+
+		r.JSON(200, "ok")
+
+		return
+	}
 }

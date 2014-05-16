@@ -53,6 +53,7 @@ func main() {
 	m.Group(apiRoot+"/users", func(r martini.Router) {
 		m.Post("", binding.Json(domain.NewUser{}), binding.ErrorHandler, routes.UserCreate)
 		m.Get("/:id", domain.AuthenticationMiddleware, routes.UserById)
+		m.Get("/", domain.AuthenticationMiddleware, routes.UsersOnline)
 	})
 
 	/*

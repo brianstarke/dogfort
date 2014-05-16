@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/brianstarke/dogfort/domain"
+	"github.com/brianstarke/dogfort/hub"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 )
@@ -28,4 +29,10 @@ func UserById(params martini.Params, r render.Render) {
 	} else {
 		r.JSON(200, u)
 	}
+}
+
+func UsersOnline(r render.Render) {
+	u := hub.H.UsersOnline()
+
+	r.JSON(200, u)
 }
