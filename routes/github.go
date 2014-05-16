@@ -13,7 +13,7 @@ import (
 
 var (
 	tmplStr = `<strong>GitHub</strong> new commits to <a href='{{.Repository.Url}}' target='_blank'>{{.Repository.Name}}</a>&nbsp;
-  <small>(<a href='{{.CompareUrl}} target='_blank'>compare</a>)</small><br>
+  <small>(<a href='{{.CompareUrl}}' target='_blank'>compare</a>)</small><br>
 {{range .Commits}}<small>- <em>{{.Committer.Username}}</em> :: {{.Message}}</small><br>{{end}}
 `
 	commitTmpl, _ = template.New("commitTemplate").Parse(tmplStr)

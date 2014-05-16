@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"net/http"
 	"os"
 	"runtime"
 
@@ -21,14 +20,6 @@ var (
 	apiRoot string = "/api/v1"
 )
 
-/*
-Redirect redirects from assholefinder.com to
-www.linkedin.com/in/willkinney
-*/
-func RedirectMiddleware(req *http.Request, context martini.Context) {
-	log.Printf("REDIRECTED %s", req.Referer())
-}
-
 func main() {
 	flag.Parse()
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -44,9 +35,6 @@ func main() {
 
 	// JSON rendering
 	m.Use(render.Renderer(render.Options{IndentJSON: true}))
-
-	// Redirect referrals from assholefinder.com
-	m.Use(RedirectMiddleware)
 
 	/*
 	  Authentication
