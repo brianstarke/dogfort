@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
 	"os"
 	"runtime"
 
@@ -16,21 +17,19 @@ import (
 )
 
 var (
-	appPath        = flag.String("appPath", "public", "path to dogfort app")
-	apiRoot string = "/api/v1"
+	appPath = flag.String("appPath", "public", "path to dogfort app")
+	apiRoot = "/api/v1"
+	tls     = flag.Bool("tls", false, "Enable TLS.")
 )
 
 func main() {
 	flag.Parse()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	// start hub
-	go hub.H.Run()
-
 	m := martini.Classic()
 
 	// serve app html/js as well
-	log.Printf("Serving dogfort app from [%s]", *appPath)
+	log.Println("Serving dogfort app from [%s]", *appPath)
 	m.Use(martini.Static(*appPath))
 
 	// JSON rendering
@@ -83,8 +82,30 @@ func main() {
 	// socket connector
 	m.Get("/ws/connect", domain.AuthenticationMiddleware, hub.WsHandler)
 
-	// start server
-	log.Printf("dogfort starting on %s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
-	m.Run()
+	// start hub
+	go hub.H.Run()
 
+	// start server
+	addr := os.Getenv("HOST") + ":" + os.Getenv("PORT")
+	log.Println(addr)
+	if *tls {
+		/*
+			// start http redirect
+			go func() {
+				if err := http.ListenAndServe(addr, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					http.Redirect(w, r, "https://"+addr+r.RequestURI, http.StatusMovedPermanently)
+				})); err != nil {
+					log.Fatal(err)
+				}
+			}()
+		*/
+		if err := http.ListenAndServeTLS(addr, os.Getenv("PEM_CERT"), os.Getenv("PEM_KEY"), m); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		// NOTE: Avoid 3000 default port in m.Run().
+		if err := http.ListenAndServe(addr, m); err != nil {
+			log.Fatal(err)
+		}
+	}
 }
